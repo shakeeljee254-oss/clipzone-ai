@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CLIPZONE AI — Creator Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #090b14;
+      --bg-secondary: #111625;
+      --bg-card: rgba(20, 27, 46, 0.86);
+      --bg-input: rgba(11, 16, 30, 0.92);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #818cf8;
+      --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      --border-color: rgba(148, 163, 184, 0.18);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-urdu: 'Noto Nastaliq Urdu', serif;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f1f5f9;
+      --bg-secondary: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.94);
+      --bg-input: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --accent: #0284c7;
+      --accent-2: #4f46e5;
+      --accent-gradient: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+      --border-color: rgba(15, 23, 42, 0.14);
+      --shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    [lang="ur"] .urdu-text,
+    .urdu-caption-preview {
+      font-family: var(--font-urdu);
+      direction: rtl;
+      line-height: 2.1;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 20px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-gradient);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: 0.4px;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .nav-btn {
+      padding: 7px 13px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.84rem;
+      cursor: pointer;
+    }
+
+    .nav-btn.active {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .top-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button, select, input[type="text"], input[type="number"], textarea {
+      font-family: inherit;
+      font-size: 0.86rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      padding: 8px 12px;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.12s ease, opacity 0.15s ease, border-color 0.15s ease;
+    }
+
+    button:hover:not(:disabled) {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      border: none;
+    }
+
+    .btn-success {
+      background: rgba(16, 185, 129, 0.18);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.16);
+      border-color: var(--danger);
+      color: #fca5a5;
+    }
+
+    .app-shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 300px 1fr 340px;
+      gap: 16px;
+    }
+
+    @media (max-width: 1160px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field label {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .preview-stage {
+      background: #05070d;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    canvas#studioCanvas {
+      max-width: 100%;
+      max-height: 460px;
+      border-radius: 8px;
+      background: #000000;
+    }
+
+    .transport-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+    }
+
+    .timeline-box {
+      position: relative;
+      height: 52px;
+      border-radius: 8px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .timeline-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0%;
+      background: rgba(56, 189, 248, 0.22);
+      pointer-events: none;
+    }
+
+    .timeline-head {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0%;
+      width: 2px;
+      background: var(--accent-2);
+      pointer-events: none;
+    }
+
+    .page-panel {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .page-panel.active {
+      display: flex;
+    }
+
+    .list-scroll {
+      max-height: 220px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .list-item {
+      padding: 9px 11px;
+      border-radius: 9px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-input);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.82rem;
+    }
+
+    .list-item.active-cap {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    .row-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .status-box {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.75rem;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      max-height: 150px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    .pill {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--bg-input);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-gradient);
+      transition: width 0.2s ease;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-group">
+      <div class="brand-logo">CZ</div>
+      <div>
+        <div class="brand-title" data-i18n="appTitle">CLIPZONE AI — Creator Studio</div>
+        <div class="brand-subtitle" data-i18n="appSubtitle">Phase 2 Local AI &amp; FFmpeg Studio</div>
+      </div>
+    </div>
+
+    <nav class="nav-tabs" aria-label="Main Studio Views">
+      <button class="nav-btn active" data-page="page-editor" id="navEditor" data-i18n="navEditor">Editor</button>
+      <button class="nav-btn" data-page="page-captions" id="navCaptions" data-i18n="navCaptions">Captions</button>
+      <button class="nav-btn" data-page="page-reframe" id="navReframe" data-i18n="navReframe">Reframe</button>
+      <button class="nav-btn" data-page="page-autopilot" id="navAutopilot" data-i18n="navAutopilot">AutoPilot</button>
+      <button class="nav-btn" data-page="page-export" id="navExport" data-i18n="navExport">Export</button>
+    </nav>
+
+    <div class="top-controls">
+      <select id="langSelect" aria-label="Language">
+        <option value="en">English</option>
+        <option value="ur">اردو (Urdu)</option>
+      </select>
+      <button id="btnThemeToggle" type="button" data-i18n="toggleTheme">Theme</button>
+      <input type="file" id="mediaFileInput" accept="video/*" hidden />
+      <button id="btnSelectVideo" type="button" class="btn-primary" data-i18n="importVideo">Import Video</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <!-- LEFT COLUMN: PHASE 1 PROJECT & STORAGE + PHASE 1 EDIT CONTROLS -->
+    <aside class="card">
+      <div class="card-header">
+        <span data-i18n="projectStorage">Project &amp; Storage</span>
+        <span class="pill" id="quotaBadge">IDB Ready</span>
+      </div>
+
+      <div class="field">
+        <label for="projectTitleInput" data-i18n="projectTitle">Project Title</label>
+        <input type="text" id="projectTitleInput" value="ClipZone Project 1" />
+      </div>
+
+      <div class="grid-2">
+        <button id="btnSaveProject" type="button" class="btn-success" data-i18n="saveProject">Save Project</button>
+        <button id="btnNewProject" type="button" data-i18n="newProject">New Project</button>
+      </div>
+
+      <div class="field">
+        <label data-i18n="savedProjects">Saved Projects</label>
+        <div class="list-scroll" id="savedProjectsContainer"></div>
+      </div>
+
+      <div class="card-header">
+        <span data-i18n="phase1Adjustments">Color &amp; Overlay</span>
+      </div>
+
+      <div class="field">
+        <label for="brightnessInput"><span data-i18n="brightness">Brightness</span><span id="brightnessVal">100%</span></label>
+        <input type="range" id="brightnessInput" min="50" max="150" value="100" />
+      </div>
+
+      <div class="field">
+        <label for="contrastInput"><span data-i18n="contrast">Contrast</span><span id="contrastVal">100%</span></label>
+        <input type="range" id="contrastInput" min="50" max="150" value="100" />
+      </div>
+
+      <div class="field">
+        <label for="saturationInput"><span data-i18n="saturation">Saturation</span><span id="saturationVal">100%</span></label>
+        <input type="range" id="saturationInput" min="0" max="200" value="100" />
+      </div>
+
+      <div class="field">
+        <label for="overlayTitleInput" data-i18n="overlayText">Overlay Title</label>
+        <input type="text" id="overlayTitleInput" placeholder="ClipZone AI" />
+      </div>
+    </aside>
+
+    <!-- CENTER COLUMN: LIVE PREVIEW & TIMELINE -->
+    <section class="card">
+      <div class="card-header">
+        <span data-i18n="previewStage">Studio Preview</span>
+        <span class="pill" id="mediaMetaBadge">No video loaded</span>
+      </div>
+
+      <div class="preview-stage">
+        <canvas id="studioCanvas" width="960" height="540"></canvas>
+      </div>
+
+      <div class="transport-row">
+        <div class="row-between">
+          <button id="btnPlayToggle" type="button" disabled data-i18n="play">Play</button>
+          <button id="btnPause" type="button" disabled data-i18n="pause">Pause</button>
+          <button id="btnSetIn" type="button" disabled data-i18n="setIn">Set In</button>
+          <button id="btnSetOut" type="button" disabled data-i18n="setOut">Set Out</button>
+        </div>
+        <div id="timeReadout" style="font-family:monospace;font-size:0.84rem;">00:00.0 / 00:00.0</div>
+      </div>
+
+      <div class="timeline-box" id="timelineScrubber">
+        <div class="timeline-fill" id="timelineFill"></div>
+        <div class="timeline-head" id="timelineHead"></div>
+      </div>
+
+      <div class="progress-track" aria-label="Task progress">
+        <div class="progress-bar" id="globalProgressBar"></div>
+      </div>
+
+      <div class="status-box" id="activityLog">Ready. Import a video file to start editing with CLIPZONE AI.</div>
+    </section>
+
+    <!-- RIGHT COLUMN: PHASE 2 PAGES (EDITOR / CAPTIONS / REFRAME / AUTOPILOT / EXPORT) -->
+    <aside class="card">
+      <!-- PAGE 1: EDITOR & FFMPEG TRIM/MERGE/AUDIO -->
+      <div id="page-editor" class="page-panel active">
+        <div class="card-header">
+          <span data-i18n="trimAndMerge">Trim, Merge &amp; Audio</span>
+          <span class="pill" id="ffmpegStatusBadge">FFmpeg Idle</span>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="trimStartInput" data-i18n="trimStart">Trim Start (s)</label>
+            <input type="number" id="trimStartInput" min="0" step="0.1" value="0" />
+          </div>
+          <div class="field">
+            <label for="trimEndInput" data-i18n="trimEnd">Trim End (s)</label>
+            <input type="number" id="trimEndInput" min="0" step="0.1" value="0" />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <button id="btnInitFFmpeg" type="button" data-i18n="initFFmpeg">Load FFmpeg</button>
+          <button id="btnApplyTrim" type="button" class="btn-primary" disabled data-i18n="applyTrim">Trim Video</button>
+        </div>
+
+        <div class="field">
+          <label for="mergeFileInput" data-i18n="mergeSecondVideo">Merge Second Video Clip</label>
+          <input type="file" id="mergeFileInput" accept="video/*" />
+        </div>
+
+        <button id="btnMergeVideos" type="button" disabled data-i18n="mergeClips">Merge Imported + Second Clip</button>
+
+        <div class="card-header">
+          <span data-i18n="audioTools">Audio Extraction &amp; Mix</span>
+        </div>
+
+        <div class="grid-2">
+          <button id="btnExtractAudio" type="button" disabled data-i18n="extractAudio">Extract MP3</button>
+          <button id="btnCancelFFmpeg" type="button" class="btn-danger" disabled data-i18n="cancelTask">Cancel</button>
+        </div>
+
+        <div class="field">
+          <label for="mixAudioInput" data-i18n="backgroundAudio">Background Audio Track</label>
+          <input type="file" id="mixAudioInput" accept="audio/*" />
+        </div>
+
+        <div class="field">
+          <label for="mixVolumeInput"><span data-i18n="mixVolume">Mix Volume</span><span id="mixVolumeVal">35%</span></label>
+          <input type="range" id="mixVolumeInput" min="0" max="100" value="35" />
+        </div>
+
+        <button id="btnMixAudio" type="button" disabled data-i18n="mixAudioBtn">Mix Audio Track</button>
+      </div>
+
+      <!-- PAGE 2: WHISPER CAPTIONS (ENGLISH, URDU, AUTO DETECT) -->
+      <div id="page-captions" class="page-panel">
+        <div class="card-header">
+          <span data-i18n="whisperCaptions">Whisper AI Captions</span>
+          <span class="pill" id="whisperStatusBadge">Whisper Idle</span>
+        </div>
+
+        <div class="field">
+          <label for="whisperLangSelect" data-i18n="captionLanguage">Language</label>
+          <select id="whisperLangSelect">
+            <option value="auto">Auto Detect</option>
+            <option value="english">English</option>
+            <option value="urdu">Urdu (اردو)</option>
+          </select>
+        </div>
+
+        <div class="grid-2">
+          <button id="btnRunWhisper" type="button" class="btn-primary" disabled data-i18n="transcribeBtn">Transcribe</button>
+          <button id="btnDownloadSrt" type="button" disabled data-i18n="exportSrt">Export .SRT</button>
+        </div>
+
+        <div class="field">
+          <label for="captionStyleSelect" data-i18n="captionStyle">Overlay Style</label>
+          <select id="captionStyleSelect">
+            <option value="standard">Standard Box</option>
+            <option value="urdu-nastaliq">Urdu Nastaliq (RTL)</option>
+            <option value="highlight">Accent Bar</option>
+          </select>
+        </div>
+
+        <div class="list-scroll" id="captionsEditorList"></div>
+      </div>
+
+      <!-- PAGE 3: MEDIAPIPE BLAZEFACE SMART REFRAME -->
+      <div id="page-reframe" class="page-panel">
+        <div class="card-header">
+          <span data-i18n="smartReframe">Smart Reframe (BlazeFace)</span>
+          <span class="pill" id="reframeStatusBadge">BlazeFace Idle</span>
+        </div>
+
+        <div class="field">
+          <label for="reframeRatioSelect" data-i18n="aspectRatio">Aspect Ratio</label>
+          <select id="reframeRatioSelect">
+            <option value="16:9">16:9</option>
+            <option value="9:16">9:16</option>
+            <option value="1:1">1:1</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="reframeSmoothInput"><span data-i18n="trackingSmoothing">Smoothing</span><span id="reframeSmoothVal">0.18</span></label>
+          <input type="range" id="reframeSmoothInput" min="0.03" max="0.60" step="0.01" value="0.18" />
+        </div>
+
+        <div class="grid-2">
+          <button id="btnDetectFaces" type="button" class="btn-primary" disabled data-i18n="detectFaces">Track Faces</button>
+          <button id="btnResetReframe" type="button" data-i18n="centerFallback">Center Crop</button>
+        </div>
+      </div>
+
+      <!-- PAGE 4: AUTOPILOT HIGHLIGHTS & ZIP EXPORT -->
+      <div id="page-autopilot" class="page-panel">
+        <div class="card-header">
+          <span data-i18n="autopilotTitle">AutoPilot Highlights</span>
+          <span class="pill" id="autopilotStatusBadge">0 Clips</span>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="clipCountInput" data-i18n="maxClips">Candidate Count</label>
+            <input type="number" id="clipCountInput" min="1" max="10" value="3" />
+          </div>
+          <div class="field">
+            <label for="clipDurationInput" data-i18n="clipLength">Clip Length (s)</label>
+            <input type="number" id="clipDurationInput" min="5" max="90" value="15" />
+          </div>
+        </div>
+
+        <button id="btnGenerateHighlights" type="button" class="btn-primary" disabled data-i18n="findHighlights">Analyze &amp; Rank Highlights</button>
+
+        <div class="list-scroll" id="highlightCandidatesList"></div>
+
+        <div class="grid-2">
+          <button id="btnRenderSelectedClips" type="button" disabled data-i18n="renderSelected">Render Selected MP4s</button>
+          <button id="btnDownloadClipsZip" type="button" class="btn-success" disabled data-i18n="downloadZip">Download ZIP</button>
+        </div>
+      </div>
+
+      <!-- PAGE 5: EXPORT 720P / 1080P MP4 -->
+      <div id="page-export" class="page-panel">
+        <div class="card-header">
+          <span data-i18n="exportMp4">MP4 Export (FFmpeg)</span>
+        </div>
+
+        <div class="field">
+          <label for="exportResolutionSelect" data-i18n="resolution">Resolution</label>
+          <select id="exportResolutionSelect">
+            <option value="720p">720p</option>
+            <option value="1080p">1080p</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="exportAspectSelect" data-i18n="aspectRatio">Aspect Ratio</label>
+          <select id="exportAspectSelect">
+            <option value="16:9">16:9</option>
+            <option value="9:16">9:16</option>
+            <option value="1:1">1:1</option>
+          </select>
+        </div>
+
+        <button id="btnExportMp4" type="button" class="btn-primary" disabled data-i18n="exportMp4Btn">Export MP4 Video</button>
+      </div>
+    </aside>
+  </main>
+
+  <script type="module">
+    import { StorageEngine } from './js/storage.js';
+    import { VideoEngine } from './js/video-engine.js';
+    import { WhisperEngine } from './js/whisper-engine.js';
+    import { ReframeEngine } from './js/reframe-engine.js';
+    import { AutopilotEngine } from './js/autopilot-engine.js';
+
+    const I18N = {
+      en: {
+        appTitle: 'CLIPZONE AI — Creator Studio',
+        appSubtitle: 'Phase 2 Local AI & FFmpeg Studio',
+        navEditor: 'Editor',
+        navCaptions: 'Captions',
+        navReframe: 'Reframe',
+        navAutopilot: 'AutoPilot',
+        navExport: 'Export',
+        toggleTheme: 'Theme',
+        importVideo: 'Import Video',
+        projectStorage: 'Project & Storage',
+        projectTitle: 'Project Title',
+        saveProject: 'Save Project',
+        newProject: 'New Project',
+        savedProjects: 'Saved Projects',
+        phase1Adjustments: 'Color & Overlay',
+        brightness: 'Brightness',
+        contrast: 'Contrast',
+        saturation: 'Saturation',
+        overlayText: 'Overlay Title',
+        previewStage: 'Studio Preview',
+        play: 'Play',
+        pause: 'Pause',
+        setIn: 'Set In',
+        setOut: 'Set Out',
+        trimAndMerge: 'Trim, Merge & Audio',
+        trimStart: 'Trim Start (s)',
+        trimEnd: 'Trim End (s)',
+        initFFmpeg: 'Load FFmpeg',
+        applyTrim: 'Trim Video',
+        mergeSecondVideo: 'Merge Second Video Clip',
+        mergeClips: 'Merge Imported + Second Clip',
+        audioTools: 'Audio Extraction & Mix',
+        extractAudio: 'Extract MP3',
+        cancelTask: 'Cancel',
+        backgroundAudio: 'Background Audio Track',
+        mixVolume: 'Mix Volume',
+        mixAudioBtn: 'Mix Audio Track',
+        whisperCaptions: 'Whisper AI Captions',
+        captionLanguage: 'Language',
+        transcribeBtn: 'Transcribe',
+        exportSrt: 'Export .SRT',
+        captionStyle: 'Overlay Style',
+        smartReframe: 'Smart Reframe (BlazeFace)',
+        aspectRatio: 'Aspect Ratio',
+        trackingSmoothing: 'Smoothing',
+        detectFaces: 'Track Faces',
+        centerFallback: 'Center Crop',
+        autopilotTitle: 'AutoPilot Highlights',
+        maxClips: 'Candidate Count',
+        clipLength: 'Clip Length (s)',
+        findHighlights: 'Analyze & Rank Highlights',
+        renderSelected: 'Render Selected MP4s',
+        downloadZip: 'Download ZIP',
+        exportMp4: 'MP4 Export (FFmpeg)',
+        resolution: 'Resolution',
+        exportMp4Btn: 'Export MP4 Video'
+      },
+      ur: {
+        appTitle: 'کلپ زون اے آئی — کریئیٹر اسٹوڈیو',
+        appSubtitle: 'فیز 2 لوکل اے آئی اور ایف ایف ایم پیگ اسٹوڈیو',
+        navEditor: 'ایڈیٹر',
+        navCaptions: 'کیپشنز',
+        navReframe: 'ری فریم',
+        navAutopilot: 'آٹو پائلٹ',
+        navExport: 'ایکسپورٹ',
+        toggleTheme: 'تھیم',
+        importVideo: 'ویڈیو درآمد کریں',
+        projectStorage: 'پروجیکٹ اور اسٹوریج',
+        projectTitle: 'پروجیکٹ کا نام',
+        saveProject: 'پروجیکٹ محفوظ کریں',
+        newProject: 'نیا پروجیکٹ',
+        savedProjects: 'محفوظ شدہ پروجیکٹس',
+        phase1Adjustments: 'رنگ اور ٹائٹل',
+        brightness: 'چمک',
+        contrast: 'تضاد',
+        saturation: 'سچوریشن',
+        overlayText: 'اوورلے ٹائٹل',
+        previewStage: 'اسٹوڈیو پریویو',
+        play: 'چلائیں',
+        pause: 'روکیں',
+        setIn: 'شروع مقرر کریں',
+        setOut: 'اختتام مقرر کریں',
+        trimAndMerge: 'ٹرم، مرج اور آڈیو',
+        trimStart: 'ٹرم آغاز (سیکنڈ)',
+        trimEnd: 'ٹرم اختتام (سیکنڈ)',
+        initFFmpeg: 'ایف ایف ایم پیگ لوڈ کریں',
+        applyTrim: 'ویڈیو ٹرم کریں',
+        mergeSecondVideo: 'دوسری ویڈیو کلپ منتخب کریں',
+        mergeClips: 'دونوں کلپس مرج کریں',
+        audioTools: 'آڈیو نکالنا اور مکسنگ',
+        extractAudio: 'ایم پی تھری نکالیں',
+        cancelTask: 'منسوخ کریں',
+        backgroundAudio: 'بیک گراؤنڈ آڈیو ٹریک',
+        mixVolume: 'مکس والیوم',
+        mixAudioBtn: 'آڈیو مکس کریں',
+        whisperCaptions: 'وسپر اے آئی کیپشنز',
+        captionLanguage: 'زبان',
+        transcribeBtn: 'ٹرانسکرائب کریں',
+        exportSrt: 'ایس آر ٹی برآمد کریں',
+        captionStyle: 'اوورلے انداز',
+        smartReframe: 'اسمارٹ ری فریم (بلیز فیس)',
+        aspectRatio: 'پہلو کا تناسب',
+        trackingSmoothing: 'ہمواری',
+        detectFaces: 'چہرے ٹریک کریں',
+        centerFallback: 'سینٹر کراپ',
+        autopilotTitle: 'آٹو پائلٹ ہائی لائٹس',
+        maxClips: 'کلپس کی تعداد',
+        clipLength: 'کلپ کا دورانیہ (سیکنڈ)',
+        findHighlights: 'ہائی لائٹس تلاش کریں',
+        renderSelected: 'منتخب ایم پی فور رینڈر کریں',
+        downloadZip: 'زپ ڈاؤن لوڈ کریں',
+        exportMp4: 'ایم پی فور ایکسپورٹ',
+        resolution: 'ریزولوشن',
+        exportMp4Btn: 'ایم پی فور ویڈیو برآمد کریں'
+      }
+    };
+
+    const logEl = document.getElementById('activityLog');
+    const progressBar = document.getElementById('globalProgressBar');
+
+    function logMessage(msg, type = 'info') {
+      const ts = new Date().toLocaleTimeString();
+      const prefix = type === 'error' ? '[ERROR]' : type === 'warn' ? '[WARN]' : '[INFO]';
+      logEl.textContent += `
+[${ts}] ${prefix} ${msg}`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function setProgress(pct) {
+      const clamped = Math.max(0, Math.min(100, Number(pct) || 0));
+      progressBar.style.width = `${clamped}%`;
+    }
+
+    const storage = new StorageEngine({ onLog: logMessage });
+    const canvas = document.getElementById('studioCanvas');
+    const videoEngine = new VideoEngine(canvas, {
+      onLog: logMessage,
+      onProgress: setProgress
+    });
+    const whisperEngine = new WhisperEngine({
+      videoEngine,
+      onLog: logMessage,
+      onProgress: setProgress
+    });
+    const reframeEngine = new ReframeEngine({
+      onLog: logMessage,
+      onProgress: setProgress
+    });
+    const autopilotEngine = new AutopilotEngine({
+      videoEngine,
+      whisperEngine,
+      reframeEngine,
+      onLog: logMessage,
+      onProgress: setProgress
+    });
+
+    videoEngine.attachPhase2Engines({ whisperEngine, reframeEngine });
+
+    // Theme & Language (English / Urdu)
+    function applyLanguage(lang) {
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ur' ? 'rtl' : 'ltr';
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[lang] && I18N[lang][key]) {
+          el.textContent = I18N[lang][key];
+        }
+      });
+    }
+
+    document.getElementById('langSelect').addEventListener('change', (e) => {
+      applyLanguage(e.target.value);
+    });
+
+    document.getElementById('btnThemeToggle').addEventListener('click', () => {
+      const html = document.documentElement;
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      logMessage(`Theme switched to ${next}.`);
+    });
+
+    // Navigation between existing pages
+    document.querySelectorAll('.nav-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-btn').forEach((b) => b.classList.remove('active'));
+        document.querySelectorAll('.page-panel').forEach((p) => p.classList.remove('active'));
+        btn.classList.add('active');
+        const target = document.getElementById(btn.dataset.page);
+        if (target) target.classList.add('active');
+      });
+    });
+
+    // Enable controls once video is loaded
+    function enableVideoActions() {
+      [
+        'btnPlayToggle', 'btnPause', 'btnSetIn', 'btnSetOut',
+        'btnApplyTrim', 'btnMergeVideos', 'btnExtractAudio', 'btnMixAudio',
+        'btnRunWhisper', 'btnDownloadSrt', 'btnDetectFaces',
+        'btnGenerateHighlights', 'btnExportMp4'
+      ].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.disabled = false;
+      });
+      document.getElementById('trimStartInput').value = 0;
+      document.getElementById('trimEndInput').value = videoEngine.duration.toFixed(1);
+      document.getElementById('mediaMetaBadge').textContent =
+        `${videoEngine.video.videoWidth}x${videoEngine.video.videoHeight} | ${videoEngine.duration.toFixed(1)}s`;
+    }
+
+    // Video import & playback
+    document.getElementById('btnSelectVideo').addEventListener('click', () => {
+      document.getElementById('mediaFileInput').click();
+    });
+
+    document.getElementById('mediaFileInput').addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      try {
+        await videoEngine.loadVideoFile(file);
+        enableVideoActions();
+      } catch (err) {
+        logMessage(err.message, 'error');
+      }
+    });
+
+    document.getElementById('btnPlayToggle').addEventListener('click', () => videoEngine.play());
+    document.getElementById('btnPause').addEventListener('click', () => videoEngine.pause());
+
+    document.getElementById('btnSetIn').addEventListener('click', () => {
+      const t = Number(videoEngine.currentTime.toFixed(1));
+      document.getElementById('trimStartInput').value = t;
+      videoEngine.setTrimRange(t, parseFloat(document.getElementById('trimEndInput').value) || videoEngine.duration);
+    });
+
+    document.getElementById('btnSetOut').addEventListener('click', () => {
+      const t = Number(videoEngine.currentTime.toFixed(1));
+      document.getElementById('trimEndInput').value = t;
+      videoEngine.setTrimRange(parseFloat(document.getElementById('trimStartInput').value) || 0, t);
+    });
+
+    document.getElementById('timelineScrubber').addEventListener('click', (e) => {
+      if (!videoEngine.duration) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      videoEngine.seek(ratio * videoEngine.duration);
+    });
+
+    function fmtTime(sec) {
+      if (!Number.isFinite(sec)) return '00:00.0';
+      const mins = Math.floor(sec / 60).toString().padStart(2, '0');
+      const rem = (sec % 60).toFixed(1).padStart(4, '0');
+      return `${mins}:${rem}`;
+    }
+
+    videoEngine.onTimeTick = (curr, dur) => {
+      const pct = dur > 0 ? (curr / dur) * 100 : 0;
+      document.getElementById('timelineFill').style.width = `${pct}%`;
+      document.getElementById('timelineHead').style.left = `${pct}%`;
+      document.getElementById('timeReadout').textContent = `${fmtTime(curr)} / ${fmtTime(dur)}`;
+      highlightCaptionAtTime(curr);
+    };
+
+    // Phase 1 color & overlay controls
+    document.getElementById('brightnessInput').addEventListener('input', (e) => {
+      document.getElementById('brightnessVal').textContent = `${e.target.value}%`;
+      videoEngine.setAdjustments({ brightness: Number(e.target.value) });
+    });
+
+    document.getElementById('contrastInput').addEventListener('input', (e) => {
+      document.getElementById('contrastVal').textContent = `${e.target.value}%`;
+      videoEngine.setAdjustments({ contrast: Number(e.target.value) });
+    });
+
+    document.getElementById('saturationInput').addEventListener('input', (e) => {
+      document.getElementById('saturationVal').textContent = `${e.target.value}%`;
+      videoEngine.setAdjustments({ saturation: Number(e.target.value) });
+    });
+
+    document.getElementById('overlayTitleInput').addEventListener('input', (e) => {
+      videoEngine.setAdjustments({ overlayText: e.target.value });
+    });
+
+    // IndexedDB Project Save / Load / Delete
+    async function refreshProjectList() {
+      const container = document.getElementById('savedProjectsContainer');
+      container.innerHTML = '';
+      try {
+        const quota = await storage.getQuotaEstimate();
+        if (quota && quota.quota > 0) {
+          const usedMb = (quota.usage / (1024 * 1024)).toFixed(1);
+          const totalMb = (quota.quota / (1024 * 1024)).toFixed(0);
+          document.getElementById('quotaBadge').textContent = `${usedMb}/${totalMb} MB`;
+        }
+        const projects = await storage.listProjects();
+        if (!projects.length) {
+          container.innerHTML = '<div style="font-size:0.78rem;color:var(--text-secondary);">No saved projects.</div>';
+          return;
+        }
+        for (const p of projects) {
+          const item = document.createElement('div');
+          item.className = 'list-item';
+          item.innerHTML = `
+            <div class="row-between">
+              <strong style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(p.title)}</strong>
+              <div class="row-between" style="gap:4px;">
+                <button type="button" data-open="${escapeHtml(p.id)}" style="padding:4px 8px;font-size:0.74rem;">Open</button>
+                <button type="button" class="btn-danger" data-delete="${escapeHtml(p.id)}" style="padding:4px 8px;font-size:0.74rem;">Delete</button>
+              </div>
+            </div>
+          `;
+          item.querySelector('[data-open]').addEventListener('click', () => openSavedProject(p.id));
+          item.querySelector('[data-delete]').addEventListener('click', async () => {
+            await storage.deleteProject(p.id);
+            await refreshProjectList();
+          });
+          container.appendChild(item);
+        }
+      } catch (err) {
+        logMessage(`Project list error: ${err.message}`, 'error');
+      }
+    }
+
+    async function openSavedProject(id) {
+      const record = await storage.loadProject(id);
+      if (!record) return;
+      document.getElementById('projectTitleInput').value = record.title || 'ClipZone Project';
+      if (record.videoBlob) {
+        await videoEngine.loadVideoBlob(record.videoBlob, record.fileName || 'project.mp4');
+        enableVideoActions();
+      }
+      if (record.state) {
+        videoEngine.applyState(record.state.video || {});
+        whisperEngine.setCaptions(record.state.captions || []);
+        reframeEngine.applyState(record.state.reframe || {});
+        autopilotEngine.setCandidates(record.state.candidates || []);
+        syncFormFromState(record.state);
+        renderCaptionsList();
+        renderCandidatesList();
+      }
+      logMessage(`Opened project "${record.title}".`);
+    }
+
+    function syncFormFromState(state) {
+      const v = state.video || {};
+      document.getElementById('brightnessInput').value = v.brightness ?? 100;
+      document.getElementById('brightnessVal').textContent = `${v.brightness ?? 100}%`;
+      document.getElementById('contrastInput').value = v.contrast ?? 100;
+      document.getElementById('contrastVal').textContent = `${v.contrast ?? 100}%`;
+      document.getElementById('saturationInput').value = v.saturation ?? 100;
+      document.getElementById('saturationVal').textContent = `${v.saturation ?? 100}%`;
+      document.getElementById('overlayTitleInput').value = v.overlayText ?? '';
+      document.getElementById('trimStartInput').value = v.trimStart ?? 0;
+      document.getElementById('trimEndInput').value = v.trimEnd ?? videoEngine.duration;
+      if (state.reframe?.aspectRatio) {
+        document.getElementById('reframeRatioSelect').value = state.reframe.aspectRatio;
+        document.getElementById('exportAspectSelect').value = state.reframe.aspectRatio;
+      }
+    }
+
+    document.getElementById('btnSaveProject').addEventListener('click', async () => {
+      try {
+        const title = document.getElementById('projectTitleInput').value.trim() || 'ClipZone Project';
+        const id = `cz-${Date.now()}`;
+        await storage.saveProject({
+          id,
+          title,
+          fileName: videoEngine.fileName || 'video.mp4',
+          videoBlob: videoEngine.sourceBlob || null,
+          updatedAt: Date.now(),
+          state: {
+            video: videoEngine.getState(),
+            captions: whisperEngine.getCaptions(),
+            reframe: reframeEngine.getState(),
+            candidates: autopilotEngine.getCandidates()
+          }
+        });
+        await refreshProjectList();
+      } catch (err) {
+        logMessage(err.message, 'error');
+      }
+    });
+
+    document.getElementById('btnNewProject').addEventListener('click', () => {
+      document.getElementById('projectTitleInput').value = `ClipZone Project ${Date.now().toString().slice(-4)}`;
+      whisperEngine.setCaptions([]);
+      autopilotEngine.setCandidates([]);
+      renderCaptionsList();
+      renderCandidatesList();
+      logMessage('Started a fresh project state.');
+    });
+
+    // FFmpeg.wasm Editor & Export actions
+    document.getElementById('btnInitFFmpeg').addEventListener('click', async () => {
+      const badge = document.getElementById('ffmpegStatusBadge');
+      badge.textContent = 'Loading...';
+      try {
+        await videoEngine.initFFmpeg();
+        badge.textContent = videoEngine.singleThreadMode ? 'FFmpeg (ST)' : 'FFmpeg Ready';
+        document.getElementById('btnCancelFFmpeg').disabled = false;
+      } catch (err) {
+        badge.textContent = 'FFmpeg Error';
+        logMessage(err.message, 'error');
+      }
+    });
+
+    document.getElementById('btnCancelFFmpeg').addEventListener('click', () => {
+      videoEngine.cancelFFmpeg();
+      document.getElementById('ffmpegStatusBadge').textContent = 'Cancelled';
+    });
+
+    document.getElementById('btnApplyTrim').addEventListener('click', async () => {
+      try {
+        const start = parseFloat(document.getElementById('trimStartInput').value) || 0;
+        const end = parseFloat(document.getElementById('trimEndInput').value) || videoEngine.duration;
+        const trimmedBlob = await videoEngine.trimVideoWithFFmpeg(start, end);
+        triggerBlobDownload(trimmedBlob, 'clipzone-trimmed.mp4');
+        await videoEngine.loadVideoBlob(trimmedBlob, 'clipzone-trimmed.mp4');
+        enableVideoActions();
+      } catch (err) {
+        logMessage(err.message, 'error');
+      }
+    });
+
+    let secondaryVideoFile = null;
+    document.getElementById('mergeFileInput').addEventListener('change', (e) => {
+      secondaryVideoFile = e.target.files?.[0] || null;
+    });
+
+    document.getElementById('btnMergeVideos').addEventListener('click', async () => {
+      try {
+        if (!secondaryVideoFile) {
+          throw new Error('Select a second video clip first.');
+        }
+        const mergedBlob = await videoEngine.mergeVideosWithFFmpeg(videoEngine.sourceBlob, secondaryVideoFile);
+        triggerBlobDownload(mergedBlob, 'clipzone-merged.mp4');
+        await videoEngine.loadVideoBlob(mergedBlob, 'clipzone-merged.mp4');
+        enableVideoActions();
+      } catch (err) {
+        logMessage(err.message, 'error');
+      }
+    });
+
+    document.getElementById('btnExtractAudio').addEventListener('click', async () => {
+      try {
+        const audioBlob = await videoEngine.extractAudioWithFFmpeg(videoEngine.sourceBlob);
+        triggerBlobDownload(audioBlob, 'clipzone-audio.mp3');
+      } catch (err) {
+        logMessage(err.message, 'error');
+      }
+    });
+
+    let backgroundAudioFile = null;
+    document.getElementById('mixAudioInput').addEventListener('change', (e) => {
+      backgroundAudioFile = e.target.files?.[0] || null;
+    });
+
+    document.getElementById('mixVolumeInput').addEventListener('input', (e) => {
+      document.getElementById('mixVolumeVal').textContent = `${e.target.value}%`;
+    });
+
+    document.getElementById('btnMixAudio').addEventListener('click', async () => {
+      try {
+        if (!backgroundAudioFile) {
+          throw new Error('Select a background audio file first.');
+        }
+        const vol = Number(document.getElementById('mixVolumeInput').value) / 100;
+        const mixedBlob = await videoEngine.mixAudioWithFFmpeg(videoEngine.sourceBlob, backgroundAudioFile, vol);
+        triggerBlobDownload(mixedBlob, 'clipzone-mixed.mp4');
+        await videoEngine.loadVideoBlob(mixedBlob, 'clipzone-mixed.mp4');
+        enableVideoActions();
+      } catch (err) {
+        logMessage(err.message, 'error');
+      }
+    });
+
+    document.getElementById('btnExportMp4').addEventListener('click', async () => {
+      try {
+        const resolution = document.getElementById('exportResolutionSelect').value;
+        const aspect = document.getElementById('exportAspectSelect').value;
+        const mp4Blob = await videoEngine.exportMp4WithFFmpeg({
+          resolution,
+          aspectRatio: aspect,
+          reframeEngine,
+          whisperEngine
+        });
+        triggerBlobDownload(mp4Blob, `clipzone-${resolution}-${aspect.replace(':', 'x')}.mp4`);
+      } catch (err) {
+        logMessage(err.message, 'error');
+      }
+    });
+
+    // Whisper AI Captions (English, Urdu, Auto Detect)
+    document.getElementById('btnRunWhisper').addEventListener('click', async () => {
+      const badge = document.getElementById('whisperStatusBadge');
+      const langChoice = document.getElementById('whisperLangSelect').value;
+      badge.textContent = 'Running...';
+      try {
+        await whisperEngine.transcribeVideoBlob(videoEngine.sourceBlob, langChoice);
+        renderCaptionsList();
+        badge.textContent = `${whisperEngine.getCaptions().length} lines`;
+      } catch (err) {
+        badge.textContent = 'Error';
+        logMessage(err.message, 'error');
+      }
+    });
+
+    document.getElementById('captionStyleSelect').addEventListener('change', (e) => {
+      whisperEngine.setCaptionStyle(e.target.value);
+      videoEngine.renderPreviewFrame();
+    });
+
+    document.getElementById('btnDownloadSrt').addEventListener('click', () => {
+      const srtContent = whisperEngine.toSRT();
+      const blob = new Blob([srtContent], { type: 'text/plain;charset=utf-8' });
+      triggerBlobDownload(blob, 'clipzone-captions.srt');
+    });
+
+    function renderCaptionsList() {
+      const list = document.getElementById('captionsEditorList');
+      list.innerHTML = '';
+      const captions = whisperEngine.getCaptions();
+      captions.forEach((cap, idx) => {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.dataset.capIndex = idx;
+        const isUrdu = /[؀-ۿ]/.test(cap.text) || cap.language === 'urdu';
+        div.innerHTML = `
+          <div class="row-between" style="font-size:0.74rem;color:var(--text-secondary);">
+            <span>${fmtTime(cap.start)} - ${fmtTime(cap.end)}</span>
+            <button type="button" data-seek="${cap.start}" style="padding:2px 7px;font-size:0.72rem;">Jump</button>
+          </div>
+          <textarea rows="2" class="${isUrdu ? 'urdu-caption-preview' : ''}">${escapeHtml(cap.text)}</textarea>
+        `;
+        div.querySelector('textarea').addEventListener('input', (ev) => {
+          whisperEngine.updateCaption(idx, ev.target.value);
+          videoEngine.renderPreviewFrame();
+        });
+        div.querySelector('[data-seek]').addEventListener('click', () => {
+          videoEngine.seek(cap.start);
+        });
+        list.appendChild(div);
+      });
+    }
+
+    function highlightCaptionAtTime(t) {
+      const captions = whisperEngine.getCaptions();
+      document.querySelectorAll('#captionsEditorList .list-item').forEach((el, idx) => {
+        const c = captions[idx];
+        if (c && t >= c.start && t <= c.end) {
+          el.classList.add('active-cap');
+        } else {
+          el.classList.remove('active-cap');
+        }
+      });
+    }
+
+    // MediaPipe BlazeFace Smart Reframe
+    document.getElementById('reframeRatioSelect').addEventListener('change', (e) => {
+      reframeEngine.setAspectRatio(e.target.value);
+      document.getElementById('exportAspectSelect').value = e.target.value;
+      videoEngine.resizeCanvasForAspect(e.target.value);
+      videoEngine.renderPreviewFrame();
+    });
+
+    document.getElementById('reframeSmoothInput').addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      document.getElementById('reframeSmoothVal').textContent = val.toFixed(2);
+      reframeEngine.setSmoothing(val);
+    });
+
+    document.getElementById('btnDetectFaces').addEventListener('click', async () => {
+      const badge = document.getElementById('reframeStatusBadge');
+      badge.textContent = 'Tracking...';
+      try {
+        await reframeEngine.analyzeVideoFaces(videoEngine.video);
+        badge.textContent = `${reframeEngine.keyframes.length} pts`;
+        videoEngine.renderPreviewFrame();
+      } catch (err) {
+        badge.textContent = 'Fallback';
+        logMessage(err.message, 'warn');
+      }
+    });
+
+    document.getElementById('btnResetReframe').addEventListener('click', () => {
+      reframeEngine.useCenterFallback();
+      document.getElementById('reframeStatusBadge').textContent = 'Center Crop';
+      videoEngine.renderPreviewFrame();
+    });
+
+    // AutoPilot Highlights & ZIP Export
+    document.getElementById('btnGenerateHighlights').addEventListener('click', async () => {
+      try {
+        const count = parseInt(document.getElementById('clipCountInput').value, 10) || 3;
+        const lengthSec = parseFloat(document.getElementById('clipDurationInput').value) || 15;
+        await autopilotEngine.findHighlights({
+          maxClips: count,
+          clipDuration: lengthSec,
+          captions: whisperEngine.getCaptions()
+        });
+        renderCandidatesList();
+        document.getElementById('btnRenderSelectedClips').disabled = false;
+        document.getElementById('autopilotStatusBadge').textContent = `${autopilotEngine.getCandidates().length} Clips`;
+      } catch (err) {
+        logMessage(err.message, 'error');
+      }
+    });
+
+    function renderCandidatesList() {
+      const container = document.getElementById('highlightCandidatesList');
+      container.innerHTML = '';
+      autopilotEngine.getCandidates().forEach((clip, i) => {
+        const row = document.createElement('div');
+        row.className = 'list-item';
+        row.innerHTML = `
+          <label class="row-between" style="cursor:pointer;">
+            <span>
+              <input type="checkbox" ${clip.selected ? 'checked' : ''} data-idx="${i}" />
+              <strong>Clip #${i + 1}</strong> (${fmtTime(clip.start)} - ${fmtTime(clip.end)})
+            </span>
+            <span class="pill">Score ${clip.score.toFixed(1)}</span>
+          </label>
+          <div style="font-size:0.75rem;color:var(--text-secondary);">${escapeHtml(clip.reason)}</div>
+        `;
+        row.querySelector('input[type="checkbox"]').addEventListener('change', (ev) => {
+          autopilotEngine.setCandidateSelected(i, ev.target.checked);
+        });
+        container.appendChild(row);
+      });
+    }
+
+    document.getElementById('btnRenderSelectedClips').addEventListener('click', async () => {
+      try {
+        const resolution = document.getElementById('exportResolutionSelect').value;
+        const aspect = document.getElementById('reframeRatioSelect').value;
+        const rendered = await autopilotEngine.renderSelectedClips({ resolution, aspectRatio: aspect });
+        if (rendered.length > 0) {
+          document.getElementById('btnDownloadClipsZip').disabled = false;
+        }
+      } catch (err) {
+        logMessage(err.message, 'error');
+      }
+    });
+
+    document.getElementById('btnDownloadClipsZip').addEventListener('click', async () => {
+      try {
+        const zipBlob = await autopilotEngine.buildZipArchive();
+        triggerBlobDownload(zipBlob, 'clipzone-autopilot-clips.zip');
+      } catch (err) {
+        logMessage(err.message, 'error');
+      }
+    });
+
+    function triggerBlobDownload(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 3000);
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    await storage.init();
+    await refreshProjectList();
+  </script>
+</body>
+</html>
