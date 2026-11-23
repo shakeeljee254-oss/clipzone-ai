@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CLIPZONE AI — Creator Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,7 +26,6 @@
       --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
       --font-urdu: 'Noto Nastaliq Urdu', serif;
     }
-
     [data-theme="light"] {
       --bg-primary: #f1f5f9;
       --bg-secondary: #ffffff;
@@ -40,13 +39,7 @@
       --border-color: rgba(15, 23, 42, 0.14);
       --shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: var(--font-ui);
       background: var(--bg-primary);
@@ -55,323 +48,131 @@
       line-height: 1.5;
       transition: background-color 0.2s ease, color 0.2s ease;
     }
-
-    [lang="ur"] .urdu-text,
-    .urdu-caption-preview {
+    [lang="ur"] .urdu-text, .urdu-caption-preview {
       font-family: var(--font-urdu);
       direction: rtl;
       line-height: 2.1;
     }
-
     .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 20px;
+      position: sticky; top: 0; z-index: 50;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 12px 20px;
       background: var(--bg-secondary);
       border-bottom: 1px solid var(--border-color);
       box-shadow: var(--shadow);
     }
-
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
+    .brand-group { display: flex; align-items: center; gap: 10px; }
     .brand-logo {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 36px; height: 36px; border-radius: 10px;
       background: var(--accent-gradient);
-      display: grid;
-      place-items: center;
-      font-weight: 800;
-      color: #ffffff;
-      font-size: 0.95rem;
+      display: grid; place-items: center;
+      font-weight: 800; color: #fff; font-size: 0.95rem;
     }
-
-    .brand-title {
-      font-weight: 800;
-      font-size: 1.05rem;
-      letter-spacing: 0.4px;
-    }
-
-    .brand-subtitle {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-    }
-
-    .nav-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
+    .brand-title { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.4px; }
+    .brand-subtitle { font-size: 0.75rem; color: var(--text-secondary); }
+    .nav-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
     .nav-btn {
-      padding: 7px 13px;
-      border-radius: 8px;
+      padding: 7px 13px; border-radius: 8px;
       border: 1px solid var(--border-color);
-      background: transparent;
-      color: var(--text-secondary);
-      font-weight: 600;
-      font-size: 0.84rem;
-      cursor: pointer;
+      background: transparent; color: var(--text-secondary);
+      font-weight: 600; font-size: 0.84rem; cursor: pointer;
     }
-
-    .nav-btn.active {
-      background: var(--accent-gradient);
-      color: #ffffff;
-      border-color: transparent;
-    }
-
-    .top-controls {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .nav-btn.active { background: var(--accent-gradient); color: #fff; border-color: transparent; }
+    .top-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
     button, select, input[type="text"], input[type="number"], textarea {
-      font-family: inherit;
-      font-size: 0.86rem;
-      border-radius: 8px;
+      font-family: inherit; font-size: 0.86rem; border-radius: 8px;
       border: 1px solid var(--border-color);
-      background: var(--bg-input);
-      color: var(--text-primary);
+      background: var(--bg-input); color: var(--text-primary);
       padding: 8px 12px;
     }
-
-    button {
-      cursor: pointer;
-      font-weight: 600;
-      transition: transform 0.12s ease, opacity 0.15s ease, border-color 0.15s ease;
-    }
-
-    button:hover:not(:disabled) {
-      border-color: var(--accent);
-      transform: translateY(-1px);
-    }
-
-    button:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-
-    .btn-primary {
-      background: var(--accent-gradient);
-      color: #ffffff;
-      border: none;
-    }
-
-    .btn-success {
-      background: rgba(16, 185, 129, 0.18);
-      border-color: var(--success);
-      color: var(--success);
-    }
-
-    .btn-danger {
-      background: rgba(239, 68, 68, 0.16);
-      border-color: var(--danger);
-      color: #fca5a5;
-    }
-
+    button { cursor: pointer; font-weight: 600; transition: transform 0.12s ease, opacity 0.15s ease, border-color 0.15s ease; }
+    button:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-1px); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary { background: var(--accent-gradient); color: #fff; border: none; }
+    .btn-success { background: rgba(16,185,129,0.18); border-color: var(--success); color: var(--success); }
+    .btn-danger { background: rgba(239,68,68,0.16); border-color: var(--danger); color: #fca5a5; }
     .app-shell {
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 16px;
-      display: grid;
-      grid-template-columns: 300px 1fr 340px;
-      gap: 16px;
+      max-width: 1440px; margin: 0 auto; padding: 16px;
+      display: grid; grid-template-columns: 300px 1fr 340px; gap: 16px;
     }
-
-    @media (max-width: 1160px) {
-      .app-shell {
-        grid-template-columns: 1fr;
-      }
-    }
-
+    @media (max-width: 1160px) { .app-shell { grid-template-columns: 1fr; } }
     .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 14px; padding: 16px; box-shadow: var(--shadow);
+      display: flex; flex-direction: column; gap: 12px;
     }
-
     .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 8px;
-      font-weight: 700;
-      font-size: 0.92rem;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border-color); padding-bottom: 8px;
+      font-weight: 700; font-size: 0.92rem;
     }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .field label {
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field label { font-size: 0.78rem; color: var(--text-secondary); display: flex; justify-content: space-between; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .preview-stage {
-      background: #05070d;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      min-height: 360px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 12px;
-      position: relative;
-      overflow: hidden;
+      background: #05070d; border: 1px solid var(--border-color);
+      border-radius: 12px; min-height: 360px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 12px; position: relative; overflow: hidden;
     }
-
-    canvas#studioCanvas {
-      max-width: 100%;
-      max-height: 460px;
-      border-radius: 8px;
-      background: #000000;
-    }
-
+    canvas#studioCanvas { max-width: 100%; max-height: 460px; border-radius: 8px; background: #000; }
     .transport-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 10px; padding: 10px 12px; border-radius: 10px;
+      background: var(--bg-input); border: 1px solid var(--border-color);
     }
-
     .timeline-box {
-      position: relative;
-      height: 52px;
-      border-radius: 8px;
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      cursor: pointer;
-      overflow: hidden;
+      position: relative; height: 52px; border-radius: 8px;
+      background: var(--bg-input); border: 1px solid var(--border-color);
+      cursor: pointer; overflow: hidden;
     }
-
     .timeline-fill {
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 0%;
-      background: rgba(56, 189, 248, 0.22);
-      pointer-events: none;
+      position: absolute; inset: 0 auto 0 0; width: 0%;
+      background: rgba(56,189,248,0.22); pointer-events: none;
     }
-
     .timeline-head {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0%;
-      width: 2px;
-      background: var(--accent-2);
-      pointer-events: none;
+      position: absolute; top: 0; bottom: 0; left: 0%;
+      width: 2px; background: var(--accent-2); pointer-events: none;
     }
-
-    .page-panel {
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .page-panel.active {
-      display: flex;
-    }
-
+    .page-panel { display: none; flex-direction: column; gap: 12px; }
+    .page-panel.active { display: flex; }
     .list-scroll {
-      max-height: 220px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      max-height: 220px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 8px;
     }
-
     .list-item {
-      padding: 9px 11px;
-      border-radius: 9px;
+      padding: 9px 11px; border-radius: 9px;
       border: 1px solid var(--border-color);
       background: var(--bg-input);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      display: flex; flex-direction: column; gap: 6px;
       font-size: 0.82rem;
     }
-
-    .list-item.active-cap {
-      border-color: var(--accent);
-      background: rgba(56, 189, 248, 0.12);
-    }
-
-    .row-between {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
+    .list-item.active-cap { border-color: var(--accent); background: rgba(56,189,248,0.12); }
+    .row-between { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .status-box {
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       font-size: 0.75rem;
       background: var(--bg-input);
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 10px;
-      max-height: 150px;
-      overflow-y: auto;
-      white-space: pre-wrap;
+      border-radius: 8px; padding: 10px;
+      max-height: 150px; overflow-y: auto; white-space: pre-wrap;
     }
-
     .pill {
-      font-size: 0.72rem;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
+      font-size: 0.72rem; padding: 2px 8px; border-radius: 999px;
+      border: 1px solid var(--border-color); color: var(--text-secondary);
     }
-
     .progress-track {
-      width: 100%;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--bg-input);
-      overflow: hidden;
+      width: 100%; height: 8px; border-radius: 999px;
+      background: var(--bg-input); overflow: hidden;
       border: 1px solid var(--border-color);
     }
-
     .progress-bar {
-      height: 100%;
-      width: 0%;
+      height: 100%; width: 0%;
       background: var(--accent-gradient);
       transition: width 0.2s ease;
     }
+    input[type="range"] { padding: 0; height: 28px; }
+    input[type="file"] { font-size: 0.78rem; }
   </style>
 </head>
 <body>
@@ -383,7 +184,6 @@
         <div class="brand-subtitle" data-i18n="appSubtitle">Phase 2 Local AI &amp; FFmpeg Studio</div>
       </div>
     </div>
-
     <nav class="nav-tabs" aria-label="Main Studio Views">
       <button class="nav-btn active" data-page="page-editor" id="navEditor" data-i18n="navEditor">Editor</button>
       <button class="nav-btn" data-page="page-captions" id="navCaptions" data-i18n="navCaptions">Captions</button>
@@ -391,7 +191,6 @@
       <button class="nav-btn" data-page="page-autopilot" id="navAutopilot" data-i18n="navAutopilot">AutoPilot</button>
       <button class="nav-btn" data-page="page-export" id="navExport" data-i18n="navExport">Export</button>
     </nav>
-
     <div class="top-controls">
       <select id="langSelect" aria-label="Language">
         <option value="en">English</option>
@@ -404,64 +203,50 @@
   </header>
 
   <main class="app-shell">
-    <!-- LEFT COLUMN: PHASE 1 PROJECT & STORAGE + PHASE 1 EDIT CONTROLS -->
     <aside class="card">
       <div class="card-header">
         <span data-i18n="projectStorage">Project &amp; Storage</span>
         <span class="pill" id="quotaBadge">IDB Ready</span>
       </div>
-
       <div class="field">
         <label for="projectTitleInput" data-i18n="projectTitle">Project Title</label>
         <input type="text" id="projectTitleInput" value="ClipZone Project 1" />
       </div>
-
       <div class="grid-2">
         <button id="btnSaveProject" type="button" class="btn-success" data-i18n="saveProject">Save Project</button>
         <button id="btnNewProject" type="button" data-i18n="newProject">New Project</button>
       </div>
-
       <div class="field">
         <label data-i18n="savedProjects">Saved Projects</label>
         <div class="list-scroll" id="savedProjectsContainer"></div>
       </div>
-
-      <div class="card-header">
-        <span data-i18n="phase1Adjustments">Color &amp; Overlay</span>
-      </div>
-
+      <div class="card-header"><span data-i18n="phase1Adjustments">Color &amp; Overlay</span></div>
       <div class="field">
         <label for="brightnessInput"><span data-i18n="brightness">Brightness</span><span id="brightnessVal">100%</span></label>
         <input type="range" id="brightnessInput" min="50" max="150" value="100" />
       </div>
-
       <div class="field">
         <label for="contrastInput"><span data-i18n="contrast">Contrast</span><span id="contrastVal">100%</span></label>
         <input type="range" id="contrastInput" min="50" max="150" value="100" />
       </div>
-
       <div class="field">
         <label for="saturationInput"><span data-i18n="saturation">Saturation</span><span id="saturationVal">100%</span></label>
         <input type="range" id="saturationInput" min="0" max="200" value="100" />
       </div>
-
       <div class="field">
         <label for="overlayTitleInput" data-i18n="overlayText">Overlay Title</label>
         <input type="text" id="overlayTitleInput" placeholder="ClipZone AI" />
       </div>
     </aside>
 
-    <!-- CENTER COLUMN: LIVE PREVIEW & TIMELINE -->
     <section class="card">
       <div class="card-header">
         <span data-i18n="previewStage">Studio Preview</span>
         <span class="pill" id="mediaMetaBadge">No video loaded</span>
       </div>
-
       <div class="preview-stage">
         <canvas id="studioCanvas" width="960" height="540"></canvas>
       </div>
-
       <div class="transport-row">
         <div class="row-between">
           <button id="btnPlayToggle" type="button" disabled data-i18n="play">Play</button>
@@ -471,28 +256,22 @@
         </div>
         <div id="timeReadout" style="font-family:monospace;font-size:0.84rem;">00:00.0 / 00:00.0</div>
       </div>
-
       <div class="timeline-box" id="timelineScrubber">
         <div class="timeline-fill" id="timelineFill"></div>
         <div class="timeline-head" id="timelineHead"></div>
       </div>
-
       <div class="progress-track" aria-label="Task progress">
         <div class="progress-bar" id="globalProgressBar"></div>
       </div>
-
       <div class="status-box" id="activityLog">Ready. Import a video file to start editing with CLIPZONE AI.</div>
     </section>
 
-    <!-- RIGHT COLUMN: PHASE 2 PAGES (EDITOR / CAPTIONS / REFRAME / AUTOPILOT / EXPORT) -->
     <aside class="card">
-      <!-- PAGE 1: EDITOR & FFMPEG TRIM/MERGE/AUDIO -->
       <div id="page-editor" class="page-panel active">
         <div class="card-header">
           <span data-i18n="trimAndMerge">Trim, Merge &amp; Audio</span>
           <span class="pill" id="ffmpegStatusBadge">FFmpeg Idle</span>
         </div>
-
         <div class="grid-2">
           <div class="field">
             <label for="trimStartInput" data-i18n="trimStart">Trim Start (s)</label>
@@ -503,48 +282,36 @@
             <input type="number" id="trimEndInput" min="0" step="0.1" value="0" />
           </div>
         </div>
-
         <div class="grid-2">
           <button id="btnInitFFmpeg" type="button" data-i18n="initFFmpeg">Load FFmpeg</button>
           <button id="btnApplyTrim" type="button" class="btn-primary" disabled data-i18n="applyTrim">Trim Video</button>
         </div>
-
         <div class="field">
           <label for="mergeFileInput" data-i18n="mergeSecondVideo">Merge Second Video Clip</label>
           <input type="file" id="mergeFileInput" accept="video/*" />
         </div>
-
         <button id="btnMergeVideos" type="button" disabled data-i18n="mergeClips">Merge Imported + Second Clip</button>
-
-        <div class="card-header">
-          <span data-i18n="audioTools">Audio Extraction &amp; Mix</span>
-        </div>
-
+        <div class="card-header"><span data-i18n="audioTools">Audio Extraction &amp; Mix</span></div>
         <div class="grid-2">
           <button id="btnExtractAudio" type="button" disabled data-i18n="extractAudio">Extract MP3</button>
           <button id="btnCancelFFmpeg" type="button" class="btn-danger" disabled data-i18n="cancelTask">Cancel</button>
         </div>
-
         <div class="field">
           <label for="mixAudioInput" data-i18n="backgroundAudio">Background Audio Track</label>
           <input type="file" id="mixAudioInput" accept="audio/*" />
         </div>
-
         <div class="field">
           <label for="mixVolumeInput"><span data-i18n="mixVolume">Mix Volume</span><span id="mixVolumeVal">35%</span></label>
           <input type="range" id="mixVolumeInput" min="0" max="100" value="35" />
         </div>
-
         <button id="btnMixAudio" type="button" disabled data-i18n="mixAudioBtn">Mix Audio Track</button>
       </div>
 
-      <!-- PAGE 2: WHISPER CAPTIONS (ENGLISH, URDU, AUTO DETECT) -->
       <div id="page-captions" class="page-panel">
         <div class="card-header">
           <span data-i18n="whisperCaptions">Whisper AI Captions</span>
           <span class="pill" id="whisperStatusBadge">Whisper Idle</span>
         </div>
-
         <div class="field">
           <label for="whisperLangSelect" data-i18n="captionLanguage">Language</label>
           <select id="whisperLangSelect">
@@ -553,12 +320,10 @@
             <option value="urdu">Urdu (اردو)</option>
           </select>
         </div>
-
         <div class="grid-2">
           <button id="btnRunWhisper" type="button" class="btn-primary" disabled data-i18n="transcribeBtn">Transcribe</button>
           <button id="btnDownloadSrt" type="button" disabled data-i18n="exportSrt">Export .SRT</button>
         </div>
-
         <div class="field">
           <label for="captionStyleSelect" data-i18n="captionStyle">Overlay Style</label>
           <select id="captionStyleSelect">
@@ -567,17 +332,14 @@
             <option value="highlight">Accent Bar</option>
           </select>
         </div>
-
         <div class="list-scroll" id="captionsEditorList"></div>
       </div>
 
-      <!-- PAGE 3: MEDIAPIPE BLAZEFACE SMART REFRAME -->
       <div id="page-reframe" class="page-panel">
         <div class="card-header">
           <span data-i18n="smartReframe">Smart Reframe (BlazeFace)</span>
           <span class="pill" id="reframeStatusBadge">BlazeFace Idle</span>
         </div>
-
         <div class="field">
           <label for="reframeRatioSelect" data-i18n="aspectRatio">Aspect Ratio</label>
           <select id="reframeRatioSelect">
@@ -586,25 +348,21 @@
             <option value="1:1">1:1</option>
           </select>
         </div>
-
         <div class="field">
           <label for="reframeSmoothInput"><span data-i18n="trackingSmoothing">Smoothing</span><span id="reframeSmoothVal">0.18</span></label>
           <input type="range" id="reframeSmoothInput" min="0.03" max="0.60" step="0.01" value="0.18" />
         </div>
-
         <div class="grid-2">
           <button id="btnDetectFaces" type="button" class="btn-primary" disabled data-i18n="detectFaces">Track Faces</button>
           <button id="btnResetReframe" type="button" data-i18n="centerFallback">Center Crop</button>
         </div>
       </div>
 
-      <!-- PAGE 4: AUTOPILOT HIGHLIGHTS & ZIP EXPORT -->
       <div id="page-autopilot" class="page-panel">
         <div class="card-header">
           <span data-i18n="autopilotTitle">AutoPilot Highlights</span>
           <span class="pill" id="autopilotStatusBadge">0 Clips</span>
         </div>
-
         <div class="grid-2">
           <div class="field">
             <label for="clipCountInput" data-i18n="maxClips">Candidate Count</label>
@@ -615,23 +373,16 @@
             <input type="number" id="clipDurationInput" min="5" max="90" value="15" />
           </div>
         </div>
-
         <button id="btnGenerateHighlights" type="button" class="btn-primary" disabled data-i18n="findHighlights">Analyze &amp; Rank Highlights</button>
-
         <div class="list-scroll" id="highlightCandidatesList"></div>
-
         <div class="grid-2">
           <button id="btnRenderSelectedClips" type="button" disabled data-i18n="renderSelected">Render Selected MP4s</button>
           <button id="btnDownloadClipsZip" type="button" class="btn-success" disabled data-i18n="downloadZip">Download ZIP</button>
         </div>
       </div>
 
-      <!-- PAGE 5: EXPORT 720P / 1080P MP4 -->
       <div id="page-export" class="page-panel">
-        <div class="card-header">
-          <span data-i18n="exportMp4">MP4 Export (FFmpeg)</span>
-        </div>
-
+        <div class="card-header"><span data-i18n="exportMp4">MP4 Export (FFmpeg)</span></div>
         <div class="field">
           <label for="exportResolutionSelect" data-i18n="resolution">Resolution</label>
           <select id="exportResolutionSelect">
@@ -639,7 +390,6 @@
             <option value="1080p">1080p</option>
           </select>
         </div>
-
         <div class="field">
           <label for="exportAspectSelect" data-i18n="aspectRatio">Aspect Ratio</label>
           <select id="exportAspectSelect">
@@ -648,149 +398,875 @@
             <option value="1:1">1:1</option>
           </select>
         </div>
-
         <button id="btnExportMp4" type="button" class="btn-primary" disabled data-i18n="exportMp4Btn">Export MP4 Video</button>
       </div>
     </aside>
   </main>
 
   <script type="module">
-    import { StorageEngine } from './js/storage.js';
-    import { VideoEngine } from './js/video-engine.js';
-    import { WhisperEngine } from './js/whisper-engine.js';
-    import { ReframeEngine } from './js/reframe-engine.js';
-    import { AutopilotEngine } from './js/autopilot-engine.js';
+    /* =====================================================================
+       CLIPZONE AI — All engines inline (storage, video, whisper, reframe, autopilot)
+       ===================================================================== */
 
+    // ---------- 1. STORAGE ENGINE (IndexedDB) ----------
+    class StorageEngine {
+      constructor({ onLog } = {}) {
+        this.onLog = onLog || (() => {});
+        this.dbName = 'clipzone-ai-db';
+        this.storeName = 'projects';
+        this.db = null;
+      }
+      async init() {
+        this.db = await new Promise((resolve, reject) => {
+          const req = indexedDB.open(this.dbName, 1);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(this.storeName)) {
+              db.createObjectStore(this.storeName, { keyPath: 'id' });
+            }
+          };
+          req.onsuccess = (e) => resolve(e.target.result);
+          req.onerror = (e) => reject(e.target.error);
+        });
+        this.onLog('Storage engine initialized (IndexedDB).');
+      }
+      _tx(mode) {
+        return this.db.transaction(this.storeName, mode).objectStore(this.storeName);
+      }
+      async saveProject(record) {
+        return new Promise((resolve, reject) => {
+          const req = this._tx('readwrite').put(record);
+          req.onsuccess = () => { this.onLog(`Project "${record.title}" saved.`); resolve(true); };
+          req.onerror = (e) => reject(e.target.error);
+        });
+      }
+      async loadProject(id) {
+        return new Promise((resolve, reject) => {
+          const req = this._tx('readonly').get(id);
+          req.onsuccess = () => resolve(req.result || null);
+          req.onerror = (e) => reject(e.target.error);
+        });
+      }
+      async listProjects() {
+        return new Promise((resolve, reject) => {
+          const req = this._tx('readonly').getAll();
+          req.onsuccess = () => {
+            const list = (req.result || []).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+            resolve(list.map((p) => ({ id: p.id, title: p.title, updatedAt: p.updatedAt })));
+          };
+          req.onerror = (e) => reject(e.target.error);
+        });
+      }
+      async deleteProject(id) {
+        return new Promise((resolve, reject) => {
+          const req = this._tx('readwrite').delete(id);
+          req.onsuccess = () => { this.onLog('Project deleted.'); resolve(true); };
+          req.onerror = (e) => reject(e.target.error);
+        });
+      }
+      async getQuotaEstimate() {
+        if (navigator.storage && navigator.storage.estimate) {
+          try { return await navigator.storage.estimate(); } catch { return null; }
+        }
+        return null;
+      }
+    }
+
+    // ---------- 2. VIDEO ENGINE (Canvas + FFmpeg) ----------
+    class VideoEngine {
+      constructor(canvas, { onLog, onProgress } = {}) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.onLog = onLog || (() => {});
+        this.onProgress = onProgress || (() => {});
+        this.onTimeTick = null;
+
+        this.video = document.createElement('video');
+        this.video.playsInline = true;
+        this.video.preload = 'auto';
+        this.video.crossOrigin = 'anonymous';
+
+        this.duration = 0;
+        this.currentTime = 0;
+        this.fileName = '';
+        this.sourceBlob = null;
+
+        this.adjustments = { brightness: 100, contrast: 100, saturation: 100, overlayText: '' };
+        this.trimStart = 0;
+        this.trimEnd = 0;
+
+        this.whisperEngine = null;
+        this.reframeEngine = null;
+
+        this.ffmpeg = null;
+        this.ffmpegLoaded = false;
+        this.singleThreadMode = false;
+        this.cancelled = false;
+
+        this._bindVideoEvents();
+        this._rafLoop();
+      }
+
+      attachPhase2Engines({ whisperEngine, reframeEngine }) {
+        this.whisperEngine = whisperEngine || null;
+        this.reframeEngine = reframeEngine || null;
+      }
+
+      _bindVideoEvents() {
+        this.video.addEventListener('loadedmetadata', () => {
+          this.duration = this.video.duration || 0;
+          this.trimEnd = this.duration;
+          this.resizeCanvasForAspect('16:9');
+          this.renderPreviewFrame();
+        });
+        this.video.addEventListener('timeupdate', () => {
+          this.currentTime = this.video.currentTime;
+          if (this.onTimeTick) this.onTimeTick(this.currentTime, this.duration);
+          this.renderPreviewFrame();
+        });
+        this.video.addEventListener('ended', () => {
+          if (this.onTimeTick) this.onTimeTick(this.duration, this.duration);
+        });
+      }
+
+      _rafLoop() {
+        const loop = () => {
+          if (!this.video.paused && this.video.readyState >= 2) this.renderPreviewFrame();
+          requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+      }
+
+      async loadVideoFile(file) {
+        this.fileName = file.name;
+        this.sourceBlob = file;
+        await this._setVideoSource(URL.createObjectURL(file));
+      }
+
+      async loadVideoBlob(blob, fileName) {
+        this.fileName = fileName || 'video.mp4';
+        this.sourceBlob = blob;
+        await this._setVideoSource(URL.createObjectURL(blob));
+      }
+
+      _setVideoSource(url) {
+        return new Promise((resolve, reject) => {
+          const onLoaded = () => { cleanup(); resolve(); };
+          const onError = () => { cleanup(); reject(new Error('Failed to load video file.')); };
+          const cleanup = () => {
+            this.video.removeEventListener('loadedmetadata', onLoaded);
+            this.video.removeEventListener('error', onError);
+          };
+          this.video.addEventListener('loadedmetadata', onLoaded);
+          this.video.addEventListener('error', onError);
+          this.video.src = url;
+          this.video.load();
+        });
+      }
+
+      play() { this.video.play().catch((e) => this.onLog(`Play error: ${e.message}`, 'warn')); }
+      pause() { this.video.pause(); }
+      seek(t) { if (this.duration) this.video.currentTime = Math.max(0, Math.min(this.duration, t)); }
+
+      setTrimRange(start, end) {
+        this.trimStart = Math.max(0, Math.min(start, this.duration));
+        this.trimEnd = Math.max(this.trimStart, Math.min(end, this.duration));
+      }
+
+      setAdjustments(partial) { Object.assign(this.adjustments, partial); this.renderPreviewFrame(); }
+
+      resizeCanvasForAspect(aspect) {
+        const map = { '16:9': [960, 540], '9:16': [540, 960], '1:1': [720, 720] };
+        const [w, h] = map[aspect] || map['16:9'];
+        this.canvas.width = w;
+        this.canvas.height = h;
+      }
+
+      renderPreviewFrame() {
+        const ctx = this.ctx;
+        const cw = this.canvas.width;
+        const ch = this.canvas.height;
+        ctx.save();
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, cw, ch);
+
+        if (this.video.readyState >= 2 && this.video.videoWidth > 0) {
+          const b = this.adjustments.brightness / 100;
+          const c = this.adjustments.contrast / 100;
+          const s = this.adjustments.saturation / 100;
+          ctx.filter = `brightness(${b}) contrast(${c}) saturate(${s})`;
+
+          let sx = 0, sy = 0, sw = this.video.videoWidth, sh = this.video.videoHeight;
+          if (this.reframeEngine && this.reframeEngine.getCropBox) {
+            const box = this.reframeEngine.getCropBox(this.currentTime, this.video.videoWidth, this.video.videoHeight);
+            if (box) ({ sx, sy, sw, sh } = box);
+          }
+          const scale = Math.max(cw / sw, ch / sh);
+          const dw = sw * scale, dh = sh * scale;
+          const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+          ctx.drawImage(this.video, sx, sy, sw, sh, dx, dy, dw, dh);
+          ctx.filter = 'none';
+        } else {
+          ctx.fillStyle = '#334155';
+          ctx.font = '20px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('No video loaded', cw / 2, ch / 2);
+        }
+
+        if (this.adjustments.overlayText) {
+          ctx.save();
+          ctx.font = 'bold 36px Inter, sans-serif';
+          ctx.fillStyle = 'rgba(0,0,0,0.5)';
+          const textW = ctx.measureText(this.adjustments.overlayText).width;
+          ctx.fillRect(20, ch - 90, textW + 24, 52);
+          ctx.fillStyle = '#fff';
+          ctx.textAlign = 'left';
+          ctx.fillText(this.adjustments.overlayText, 32, ch - 54);
+          ctx.restore();
+        }
+
+        if (this.whisperEngine) this.whisperEngine.drawCaptions(ctx, this.currentTime, cw, ch);
+        ctx.restore();
+      }
+
+      getState() {
+        return {
+          brightness: this.adjustments.brightness,
+          contrast: this.adjustments.contrast,
+          saturation: this.adjustments.saturation,
+          overlayText: this.adjustments.overlayText,
+          trimStart: this.trimStart,
+          trimEnd: this.trimEnd
+        };
+      }
+      applyState(state = {}) {
+        this.adjustments.brightness = state.brightness ?? 100;
+        this.adjustments.contrast = state.contrast ?? 100;
+        this.adjustments.saturation = state.saturation ?? 100;
+        this.adjustments.overlayText = state.overlayText ?? '';
+        this.trimStart = state.trimStart ?? 0;
+        this.trimEnd = state.trimEnd ?? this.duration;
+        this.renderPreviewFrame();
+      }
+
+      // ---------- FFmpeg ----------
+      async initFFmpeg() {
+        if (this.ffmpegLoaded) return;
+        this.onLog('Loading FFmpeg.wasm (first time may take 20-40s)...');
+        this.onProgress(2);
+        const { FFmpeg } = await import('https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');
+        const { toBlobURL } = await import('https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js');
+        const ffmpeg = new FFmpeg();
+
+        const base = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
+        const coreURL = await toBlobURL(`${base}/ffmpeg-core.js`, 'text/javascript');
+        const wasmURL = await toBlobURL(`${base}/ffmpeg-core.wasm`, 'application/wasm');
+        await ffmpeg.load({ coreURL, wasmURL });
+
+        this.ffmpeg = ffmpeg;
+        this.singleThreadMode = true;
+        this.ffmpeg.on('log', ({ message }) => {
+          if (/error|Error|Invalid/i.test(message)) this.onLog(`[ffmpeg] ${message}`, 'warn');
+        });
+        this.ffmpeg.on('progress', ({ progress }) => {
+          this.onProgress(Math.max(0, Math.min(100, Math.round(progress * 100))));
+        });
+        this.ffmpegLoaded = true;
+        this.onProgress(100);
+        this.onLog('FFmpeg ready (single-thread).');
+      }
+
+      cancelFFmpeg() {
+        this.cancelled = true;
+        if (this.ffmpeg && this.ffmpeg.terminate) {
+          try { this.ffmpeg.terminate(); } catch {}
+        }
+        this.ffmpegLoaded = false;
+        this.onLog('FFmpeg task cancelled. You must reload FFmpeg.', 'warn');
+      }
+
+      async _writeInput(blob, name) {
+        const { fetchFile } = await import('https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js');
+        const data = await fetchFile(blob);
+        await this.ffmpeg.writeFile(name, data);
+      }
+      async _readOutput(name) {
+        const data = await this.ffmpeg.readFile(name);
+        return new Blob([data.buffer], { type: 'video/mp4' });
+      }
+
+      async trimVideoWithFFmpeg(start, end) {
+        if (!this.ffmpegLoaded) throw new Error('Load FFmpeg first.');
+        this.cancelled = false;
+        this.onProgress(0);
+        this.onLog(`Trimming ${start}s → ${end}s...`);
+        await this._writeInput(this.sourceBlob, 'input.mp4');
+        const dur = Math.max(0.1, end - start);
+        await this.ffmpeg.exec([
+          '-ss', String(start), '-i', 'input.mp4', '-t', String(dur),
+          '-c:v', 'libx264', '-preset', 'ultrafast', '-c:a', 'aac',
+          '-y', 'trimmed.mp4'
+        ]);
+        const blob = await this._readOutput('trimmed.mp4');
+        this.onProgress(100);
+        this.onLog('Trim complete.');
+        return blob;
+      }
+
+      async mergeVideosWithFFmpeg(blobA, fileB) {
+        if (!this.ffmpegLoaded) throw new Error('Load FFmpeg first.');
+        this.cancelled = false;
+        this.onProgress(0);
+        this.onLog('Merging videos (re-encoding for compatibility)...');
+        await this._writeInput(blobA, 'a.mp4');
+        await this._writeInput(fileB, 'b.mp4');
+        const norm = (inp, out) => this.ffmpeg.exec([
+          '-i', inp,
+          '-vf', 'scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,setsar=1',
+          '-r', '30', '-c:v', 'libx264', '-preset', 'ultrafast', '-c:a', 'aac', '-ar', '44100',
+          out
+        ]);
+        await norm('a.mp4', 'a_norm.mp4');
+        await norm('b.mp4', 'b_norm.mp4');
+        await this.ffmpeg.writeFile('list.txt', new TextEncoder().encode('file a_norm.mp4\nfile b_norm.mp4\n'));
+        await this.ffmpeg.exec(['-f', 'concat', '-safe', '0', '-i', 'list.txt', '-c', 'copy', '-y', 'merged.mp4']);
+        const blob = await this._readOutput('merged.mp4');
+        this.onProgress(100);
+        this.onLog('Merge complete.');
+        return blob;
+      }
+
+      async extractAudioWithFFmpeg(blob) {
+        if (!this.ffmpegLoaded) throw new Error('Load FFmpeg first.');
+        this.cancelled = false;
+        this.onProgress(0);
+        this.onLog('Extracting MP3 audio...');
+        await this._writeInput(blob, 'input.mp4');
+        await this.ffmpeg.exec(['-i', 'input.mp4', '-q:a', '2', '-c:a', 'libmp3lame', '-y', 'audio.mp3']);
+        const data = await this.ffmpeg.readFile('audio.mp3');
+        this.onProgress(100);
+        this.onLog('Audio extracted.');
+        return new Blob([data.buffer], { type: 'audio/mpeg' });
+      }
+
+      async mixAudioWithFFmpeg(videoBlob, audioFile, volume = 0.35) {
+        if (!this.ffmpegLoaded) throw new Error('Load FFmpeg first.');
+        this.cancelled = false;
+        this.onProgress(0);
+        this.onLog(`Mixing background audio at ${Math.round(volume * 100)}%...`);
+        await this._writeInput(videoBlob, 'video.mp4');
+        const { fetchFile } = await import('https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js');
+        await this.ffmpeg.writeFile('bg.mp3', await fetchFile(audioFile));
+        await this.ffmpeg.exec([
+          '-i', 'video.mp4', '-i', 'bg.mp3',
+          '-filter_complex',
+          `[1:a]volume=${volume}[bg];[0:a][bg]amix=inputs=2:duration=first:dropout_transition=2[a]`,
+          '-map', '0:v', '-map', '[a]',
+          '-c:v', 'copy', '-c:a', 'aac',
+          '-shortest', '-y', 'mixed.mp4'
+        ]);
+        const blob = await this._readOutput('mixed.mp4');
+        this.onProgress(100);
+        this.onLog('Audio mix complete.');
+        return blob;
+      }
+
+      async exportMp4WithFFmpeg({ resolution = '720p', aspectRatio = '16:9', reframeEngine } = {}) {
+        if (!this.ffmpegLoaded) throw new Error('Load FFmpeg first.');
+        this.cancelled = false;
+        this.onProgress(0);
+        this.onLog(`Exporting ${resolution} ${aspectRatio}...`);
+        const resMap = {
+          '720p': { '16:9': [1280, 720], '9:16': [720, 1280], '1:1': [720, 720] },
+          '1080p': { '16:9': [1920, 1080], '9:16': [1080, 1920], '1:1': [1080, 1080] }
+        };
+        const [W, H] = resMap[resolution][aspectRatio] || resMap['720p']['16:9'];
+        await this._writeInput(this.sourceBlob, 'input.mp4');
+        const filter = (reframeEngine && reframeEngine.keyframes && reframeEngine.keyframes.length)
+          ? `scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H}`
+          : `scale=${W}:${H}:force_original_aspect_ratio=decrease,pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2`;
+        await this.ffmpeg.exec([
+          '-i', 'input.mp4', '-vf', filter,
+          '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23',
+          '-c:a', 'aac', '-y', 'export.mp4'
+        ]);
+        const blob = await this._readOutput('export.mp4');
+        this.onProgress(100);
+        this.onLog('Export complete.');
+        return blob;
+      }
+    }
+
+    // ---------- 3. WHISPER ENGINE ----------
+    class WhisperEngine {
+      constructor({ videoEngine, onLog, onProgress } = {}) {
+        this.videoEngine = videoEngine || null;
+        this.onLog = onLog || (() => {});
+        this.onProgress = onProgress || (() => {});
+        this.captions = [];
+        this.style = 'standard';
+      }
+      setCaptionStyle(style) { this.style = style; }
+      getCaptions() { return this.captions; }
+      setCaptions(list) { this.captions = Array.isArray(list) ? list.map((c) => ({ ...c })) : []; }
+      updateCaption(index, text) { if (this.captions[index]) this.captions[index].text = text; }
+
+      async transcribeVideoBlob(blob, langChoice = 'auto') {
+        this.onLog(`Transcribing (lang=${langChoice})...`);
+        this.onProgress(5);
+        try {
+          const { pipeline, env } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
+          env.allowLocalModels = false;
+          env.useBrowserCache = true;
+          const langMap = { english: 'en', urdu: 'ur', auto: undefined };
+          const whisper = await pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny', { quantized: true });
+          const audio = await this._extractAudioPCM(blob);
+          this.onProgress(35);
+          const out = await whisper(audio, {
+            language: langMap[langChoice],
+            task: 'transcribe',
+            chunk_length_s: 30,
+            stride_length_s: 5,
+            return_timestamps: true
+          });
+          const segs = out.chunks && out.chunks.length
+            ? out.chunks.map((c) => ({
+                start: c.timestamp[0] || 0,
+                end: c.timestamp[1] || (c.timestamp[0] || 0) + 2,
+                text: (c.text || '').trim(),
+                language: langChoice === 'auto' ? 'auto' : langChoice
+              }))
+            : [{ start: 0, end: (this.videoEngine?.duration || 2), text: out.text || '', language: langChoice }];
+          this.captions = segs.filter((s) => s.text);
+          this.onProgress(100);
+          this.onLog(`Transcribed ${this.captions.length} segments.`);
+          return this.captions;
+        } catch (err) {
+          this.onLog(`Whisper unavailable (${err.message}). Using placeholder captions.`, 'warn');
+          return this._placeholderCaptions(langChoice);
+        }
+      }
+
+      async _extractAudioPCM(blob) {
+        const arrayBuf = await blob.arrayBuffer();
+        const AC = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AC({ sampleRate: 16000 });
+        const audioBuf = await ctx.decodeAudioData(arrayBuf.slice(0));
+        const channel = audioBuf.getChannelData(0);
+        await ctx.close();
+        return channel;
+      }
+
+      _placeholderCaptions(langChoice) {
+        const dur = this.videoEngine?.duration || 10;
+        const step = 3;
+        const list = [];
+        let i = 0;
+        for (let t = 0; t < dur; t += step) {
+          const text = langChoice === 'urdu' ? `نمونہ کیپشن ${++i}` : `Sample caption ${++i}`;
+          list.push({
+            start: t, end: Math.min(t + step, dur), text,
+            language: langChoice === 'urdu' ? 'urdu' : 'english'
+          });
+        }
+        this.captions = list;
+        this.onProgress(100);
+        this.onLog('Placeholder captions generated (Whisper offline).', 'warn');
+        return list;
+      }
+
+      drawCaptions(ctx, time, cw, ch) {
+        const cap = this.captions.find((c) => time >= c.start && time <= c.end);
+        if (!cap || !cap.text) return;
+        const isUrdu = /[\u0600-\u06FF]/.test(cap.text) || cap.language === 'urdu' || this.style === 'urdu-nastaliq';
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const fontSize = Math.round(ch * 0.055);
+        ctx.font = `${isUrdu ? '' : '600 '}${fontSize}px ${isUrdu ? '"Noto Nastaliq Urdu", serif' : 'Inter, sans-serif'}`;
+        const maxW = cw * 0.86;
+        const words = cap.text.split(/\s+/);
+        const lines = [];
+        let line = '';
+        for (const w of words) {
+          const test = line ? line + ' ' + w : w;
+          if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = w; }
+          else { line = test; }
+        }
+        if (line) lines.push(line);
+        const lineH = fontSize * 1.45;
+        const totalH = lineH * lines.length;
+        const baseY = ch - 40 - totalH / 2;
+        if (this.style === 'standard' || this.style === 'highlight') {
+          const bgW = Math.min(maxW + 40, cw - 40);
+          const bgH = totalH + 24;
+          ctx.fillStyle = this.style === 'highlight' ? 'rgba(56,189,248,0.85)' : 'rgba(0,0,0,0.65)';
+          this._roundRect(ctx, (cw - bgW) / 2, baseY - bgH / 2, bgW, bgH, 10);
+          ctx.fill();
+        }
+        ctx.fillStyle = '#fff';
+        lines.forEach((ln, idx) => {
+          const y = baseY - totalH / 2 + lineH * idx + lineH / 2;
+          ctx.fillText(ln, cw / 2, y);
+        });
+        ctx.restore();
+      }
+
+      _roundRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+      }
+
+      toSRT() {
+        const fmt = (s) => {
+          const ms = Math.floor((s % 1) * 1000);
+          const sec = Math.floor(s) % 60;
+          const min = Math.floor(s / 60) % 60;
+          const hr = Math.floor(s / 3600);
+          const pad = (n, l = 2) => String(n).padStart(l, '0');
+          return `${pad(hr)}:${pad(min)}:${pad(sec)},${pad(ms, 3)}`;
+        };
+        return this.captions.map((c, i) => `${i + 1}\n${fmt(c.start)} --> ${fmt(c.end)}\n${c.text}\n`).join('\n');
+      }
+    }
+
+    // ---------- 4. REFRAME ENGINE ----------
+    class ReframeEngine {
+      constructor({ onLog, onProgress } = {}) {
+        this.onLog = onLog || (() => {});
+        this.onProgress = onProgress || (() => {});
+        this.aspectRatio = '16:9';
+        this.smoothing = 0.18;
+        this.keyframes = [];
+        this.useCenter = true;
+      }
+      setAspectRatio(r) { this.aspectRatio = r; }
+      setSmoothing(v) { this.smoothing = v; }
+      useCenterFallback() { this.useCenter = true; this.keyframes = []; }
+      getState() {
+        return {
+          aspectRatio: this.aspectRatio, smoothing: this.smoothing,
+          keyframes: this.keyframes.slice(), useCenter: this.useCenter
+        };
+      }
+      applyState(state = {}) {
+        this.aspectRatio = state.aspectRatio || this.aspectRatio;
+        this.smoothing = state.smoothing || this.smoothing;
+        this.keyframes = Array.isArray(state.keyframes) ? state.keyframes.slice() : [];
+        this.useCenter = state.useCenter ?? this.keyframes.length === 0;
+      }
+
+      async analyzeVideoFaces(videoEl) {
+        this.onLog('Analyzing faces with MediaPipe BlazeFace...');
+        this.onProgress(2);
+        try {
+          const mod = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.12');
+          const { FaceDetector, FilesetResolver } = mod;
+          const vision = await FilesetResolver.forVisionTasks(
+            'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.12/wasm'
+          );
+          const detector = await FaceDetector.createFromOptions(vision, {
+            baseOptions: {
+              modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite',
+              delegate: 'GPU'
+            },
+            runningMode: 'VIDEO'
+          });
+          const v = videoEl;
+          const originalTime = v.currentTime;
+          const wasPaused = v.paused;
+          v.pause();
+          const duration = v.duration || 10;
+          const samples = Math.min(60, Math.max(10, Math.round(duration * 2)));
+          const step = duration / samples;
+          this.keyframes = [];
+          for (let i = 0; i < samples; i++) {
+            const t = i * step;
+            await this._seekAndWait(v, t);
+            try {
+              const res = detector.detectForVideo(v, performance.now());
+              if (res && res.detections && res.detections.length) {
+                const bbox = res.detections[0].boundingBox;
+                const cx = (bbox.originX + bbox.width / 2) / v.videoWidth;
+                const cy = (bbox.originY + bbox.height / 2) / v.videoHeight;
+                this.keyframes.push({ time: t, cx, cy });
+              }
+            } catch {}
+            this.onProgress(Math.round((i / samples) * 100));
+          }
+          v.currentTime = originalTime;
+          if (!wasPaused) v.play().catch(() => {});
+          this.useCenter = this.keyframes.length === 0;
+          this.onLog(this.useCenter
+            ? 'No faces detected. Center crop will be used.'
+            : `Tracked ${this.keyframes.length} face keyframes.`);
+          this.onProgress(100);
+        } catch (err) {
+          this.onLog(`BlazeFace unavailable: ${err.message}. Using center crop.`, 'warn');
+          this.useCenterFallback();
+          this.onProgress(100);
+        }
+      }
+
+      _seekAndWait(video, t) {
+        return new Promise((resolve) => {
+          const onSeeked = () => { video.removeEventListener('seeked', onSeeked); resolve(); };
+          video.addEventListener('seeked', onSeeked);
+          video.currentTime = Math.max(0, Math.min(video.duration, t));
+        });
+      }
+
+      getCropBox(time, vw, vh) {
+        if (this.useCenter || !this.keyframes.length) return null;
+        let prev = this.keyframes[0];
+        let next = this.keyframes[this.keyframes.length - 1];
+        for (let i = 0; i < this.keyframes.length; i++) {
+          if (this.keyframes[i].time <= time) prev = this.keyframes[i];
+          if (this.keyframes[i].time >= time) { next = this.keyframes[i]; break; }
+        }
+        const span = Math.max(0.0001, next.time - prev.time);
+        const alpha = Math.max(0, Math.min(1, (time - prev.time) / span));
+        const smooth = this.smoothing;
+        const cxN = prev.cx + (next.cx - prev.cx) * alpha * smooth;
+        const cyN = prev.cy + (next.cy - prev.cy) * alpha * smooth;
+        const ar = this._aspectToNumber(this.aspectRatio);
+        let cw = vw, ch = vh;
+        if (vw / vh > ar) { cw = vh * ar; ch = vh; } else { cw = vw; ch = vw / ar; }
+        const cx = cxN * vw, cy = cyN * vh;
+        let sx = Math.max(0, Math.min(vw - cw, cx - cw / 2));
+        let sy = Math.max(0, Math.min(vh - ch, cy - ch / 2));
+        return { sx, sy, sw: cw, sh: ch };
+      }
+
+      _aspectToNumber(ratio) { const [a, b] = ratio.split(':').map(Number); return a / b; }
+    }
+
+    // ---------- 5. AUTOPILOT ENGINE ----------
+    class AutopilotEngine {
+      constructor({ videoEngine, whisperEngine, reframeEngine, onLog, onProgress } = {}) {
+        this.videoEngine = videoEngine;
+        this.whisperEngine = whisperEngine;
+        this.reframeEngine = reframeEngine;
+        this.onLog = onLog || (() => {});
+        this.onProgress = onProgress || (() => {});
+        this.candidates = [];
+        this.renderedClips = [];
+      }
+      getCandidates() { return this.candidates; }
+      setCandidates(list) { this.candidates = Array.isArray(list) ? list.map((c) => ({ ...c })) : []; }
+      setCandidateSelected(idx, selected) { if (this.candidates[idx]) this.candidates[idx].selected = selected; }
+
+      async findHighlights({ maxClips = 3, clipDuration = 15, captions = [] } = {}) {
+        const dur = this.videoEngine?.duration || 0;
+        if (!dur) throw new Error('Load a video first.');
+        this.onLog(`Analyzing ${dur.toFixed(1)}s for highlights...`);
+        this.onProgress(5);
+        const segs = [];
+        const win = clipDuration;
+        for (let t = 0; t + win <= dur; t += win / 2) {
+          const caps = captions.filter((c) => c.end > t && c.start < t + win);
+          const density = caps.reduce((s, c) => s + (c.text ? c.text.length : 0), 0);
+          segs.push({ start: t, end: t + win, score: density });
+        }
+        segs.sort((a, b) => b.score - a.score);
+        const top = segs.slice(0, Math.max(1, Math.min(10, maxClips)));
+        const chosen = [];
+        for (const s of top) {
+          if (!chosen.some((c) => Math.abs(c.start - s.start) < clipDuration * 0.5)) chosen.push(s);
+        }
+        chosen.sort((a, b) => a.start - b.start);
+        this.candidates = chosen.map((c) => ({
+          start: Number(c.start.toFixed(2)),
+          end: Number(c.end.toFixed(2)),
+          score: Number(c.score.toFixed(1)),
+          reason: c.score > 0 ? 'Caption-rich segment' : 'Evenly-spaced candidate',
+          selected: true
+        }));
+        this.onProgress(100);
+        this.onLog(`Found ${this.candidates.length} highlight candidates.`);
+        return this.candidates;
+      }
+
+      async renderSelectedClips({ resolution = '720p', aspectRatio = '16:9' } = {}) {
+        const ve = this.videoEngine;
+        if (!ve || !ve.ffmpegLoaded) throw new Error('Load FFmpeg before rendering clips.');
+        const selected = this.candidates.filter((c) => c.selected);
+        if (!selected.length) throw new Error('No clips selected.');
+        this.renderedClips = [];
+        this.onProgress(0);
+        for (let i = 0; i < selected.length; i++) {
+          const c = selected[i];
+          this.onLog(`Rendering clip ${i + 1}/${selected.length} (${c.start}s → ${c.end}s)...`);
+          const blob = await ve.trimVideoWithFFmpeg(c.start, c.end);
+          this.renderedClips.push({ name: `clip-${String(i + 1).padStart(2, '0')}.mp4`, blob });
+          this.onProgress(Math.round(((i + 1) / selected.length) * 100));
+        }
+        this.onLog(`Rendered ${this.renderedClips.length} clips.`);
+        return this.renderedClips;
+      }
+
+      async buildZipArchive() {
+        if (!this.renderedClips.length) throw new Error('No rendered clips to zip.');
+        const files = await Promise.all(this.renderedClips.map(async ({ name, blob }) => ({
+          name, data: new Uint8Array(await blob.arrayBuffer())
+        })));
+        const chunks = [];
+        const central = [];
+        let offset = 0;
+        for (const f of files) {
+          const nameBytes = new TextEncoder().encode(f.name);
+          const crc = this._crc32(f.data);
+          const local = this._localHeader(nameBytes, f.data.length, crc);
+          chunks.push(local, f.data);
+          central.push({ nameBytes, size: f.data.length, crc, offset });
+          offset += local.length + f.data.length;
+        }
+        const centralStart = offset;
+        let centralSize = 0;
+        for (const c of central) {
+          const h = this._centralHeader(c.nameBytes, c.size, c.crc, c.offset);
+          chunks.push(h);
+          centralSize += h.length;
+        }
+        chunks.push(this._endRecord(central.length, centralSize, centralStart));
+        return new Blob(chunks, { type: 'application/zip' });
+      }
+
+      _crc32(buf) {
+        let table = this._crcTable;
+        if (!table) {
+          table = new Uint32Array(256);
+          for (let i = 0; i < 256; i++) {
+            let c = i;
+            for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+            table[i] = c >>> 0;
+          }
+          this._crcTable = table;
+        }
+        let crc = 0xffffffff;
+        for (let i = 0; i < buf.length; i++) crc = table[(crc ^ buf[i]) & 0xff] ^ (crc >>> 8);
+        return (crc ^ 0xffffffff) >>> 0;
+      }
+      _localHeader(nameBytes, size, crc) {
+        const h = new Uint8Array(30 + nameBytes.length);
+        const dv = new DataView(h.buffer);
+        dv.setUint32(0, 0x04034b50, true);
+        dv.setUint16(4, 20, true); dv.setUint16(6, 0, true);
+        dv.setUint16(8, 0, true); dv.setUint16(10, 0, true); dv.setUint16(12, 0, true);
+        dv.setUint32(14, crc, true); dv.setUint32(18, size, true); dv.setUint32(22, size, true);
+        dv.setUint16(26, nameBytes.length, true); dv.setUint16(28, 0, true);
+        h.set(nameBytes, 30);
+        return h;
+      }
+      _centralHeader(nameBytes, size, crc, offset) {
+        const h = new Uint8Array(46 + nameBytes.length);
+        const dv = new DataView(h.buffer);
+        dv.setUint32(0, 0x02014b50, true);
+        dv.setUint16(4, 20, true); dv.setUint16(6, 20, true);
+        dv.setUint16(8, 0, true); dv.setUint16(10, 0, true); dv.setUint16(12, 0, true);
+        dv.setUint16(14, 0, true);
+        dv.setUint32(16, crc, true); dv.setUint32(20, size, true); dv.setUint32(24, size, true);
+        dv.setUint16(28, nameBytes.length, true);
+        dv.setUint16(30, 0, true); dv.setUint16(32, 0, true); dv.setUint16(34, 0, true);
+        dv.setUint16(36, 0, true); dv.setUint32(38, 0, true); dv.setUint32(42, offset, true);
+        h.set(nameBytes, 46);
+        return h;
+      }
+      _endRecord(count, size, offset) {
+        const h = new Uint8Array(22);
+        const dv = new DataView(h.buffer);
+        dv.setUint32(0, 0x06054b50, true);
+        dv.setUint16(4, 0, true); dv.setUint16(6, 0, true);
+        dv.setUint16(8, count, true); dv.setUint16(10, count, true);
+        dv.setUint32(12, size, true); dv.setUint32(16, offset, true);
+        dv.setUint16(20, 0, true);
+        return h;
+      }
+    }
+
+    /* =====================================================================
+       I18N
+       ===================================================================== */
     const I18N = {
       en: {
         appTitle: 'CLIPZONE AI — Creator Studio',
         appSubtitle: 'Phase 2 Local AI & FFmpeg Studio',
-        navEditor: 'Editor',
-        navCaptions: 'Captions',
-        navReframe: 'Reframe',
-        navAutopilot: 'AutoPilot',
-        navExport: 'Export',
-        toggleTheme: 'Theme',
-        importVideo: 'Import Video',
-        projectStorage: 'Project & Storage',
-        projectTitle: 'Project Title',
-        saveProject: 'Save Project',
-        newProject: 'New Project',
-        savedProjects: 'Saved Projects',
-        phase1Adjustments: 'Color & Overlay',
-        brightness: 'Brightness',
-        contrast: 'Contrast',
-        saturation: 'Saturation',
-        overlayText: 'Overlay Title',
-        previewStage: 'Studio Preview',
-        play: 'Play',
-        pause: 'Pause',
-        setIn: 'Set In',
-        setOut: 'Set Out',
-        trimAndMerge: 'Trim, Merge & Audio',
-        trimStart: 'Trim Start (s)',
-        trimEnd: 'Trim End (s)',
-        initFFmpeg: 'Load FFmpeg',
-        applyTrim: 'Trim Video',
+        navEditor: 'Editor', navCaptions: 'Captions', navReframe: 'Reframe',
+        navAutopilot: 'AutoPilot', navExport: 'Export', toggleTheme: 'Theme',
+        importVideo: 'Import Video', projectStorage: 'Project & Storage',
+        projectTitle: 'Project Title', saveProject: 'Save Project',
+        newProject: 'New Project', savedProjects: 'Saved Projects',
+        phase1Adjustments: 'Color & Overlay', brightness: 'Brightness',
+        contrast: 'Contrast', saturation: 'Saturation', overlayText: 'Overlay Title',
+        previewStage: 'Studio Preview', play: 'Play', pause: 'Pause',
+        setIn: 'Set In', setOut: 'Set Out', trimAndMerge: 'Trim, Merge & Audio',
+        trimStart: 'Trim Start (s)', trimEnd: 'Trim End (s)',
+        initFFmpeg: 'Load FFmpeg', applyTrim: 'Trim Video',
         mergeSecondVideo: 'Merge Second Video Clip',
         mergeClips: 'Merge Imported + Second Clip',
-        audioTools: 'Audio Extraction & Mix',
-        extractAudio: 'Extract MP3',
-        cancelTask: 'Cancel',
-        backgroundAudio: 'Background Audio Track',
-        mixVolume: 'Mix Volume',
-        mixAudioBtn: 'Mix Audio Track',
-        whisperCaptions: 'Whisper AI Captions',
-        captionLanguage: 'Language',
-        transcribeBtn: 'Transcribe',
-        exportSrt: 'Export .SRT',
-        captionStyle: 'Overlay Style',
-        smartReframe: 'Smart Reframe (BlazeFace)',
-        aspectRatio: 'Aspect Ratio',
-        trackingSmoothing: 'Smoothing',
-        detectFaces: 'Track Faces',
-        centerFallback: 'Center Crop',
-        autopilotTitle: 'AutoPilot Highlights',
-        maxClips: 'Candidate Count',
-        clipLength: 'Clip Length (s)',
-        findHighlights: 'Analyze & Rank Highlights',
-        renderSelected: 'Render Selected MP4s',
-        downloadZip: 'Download ZIP',
-        exportMp4: 'MP4 Export (FFmpeg)',
-        resolution: 'Resolution',
+        audioTools: 'Audio Extraction & Mix', extractAudio: 'Extract MP3',
+        cancelTask: 'Cancel', backgroundAudio: 'Background Audio Track',
+        mixVolume: 'Mix Volume', mixAudioBtn: 'Mix Audio Track',
+        whisperCaptions: 'Whisper AI Captions', captionLanguage: 'Language',
+        transcribeBtn: 'Transcribe', exportSrt: 'Export .SRT',
+        captionStyle: 'Overlay Style', smartReframe: 'Smart Reframe (BlazeFace)',
+        aspectRatio: 'Aspect Ratio', trackingSmoothing: 'Smoothing',
+        detectFaces: 'Track Faces', centerFallback: 'Center Crop',
+        autopilotTitle: 'AutoPilot Highlights', maxClips: 'Candidate Count',
+        clipLength: 'Clip Length (s)', findHighlights: 'Analyze & Rank Highlights',
+        renderSelected: 'Render Selected MP4s', downloadZip: 'Download ZIP',
+        exportMp4: 'MP4 Export (FFmpeg)', resolution: 'Resolution',
         exportMp4Btn: 'Export MP4 Video'
       },
       ur: {
         appTitle: 'کلپ زون اے آئی — کریئیٹر اسٹوڈیو',
         appSubtitle: 'فیز 2 لوکل اے آئی اور ایف ایف ایم پیگ اسٹوڈیو',
-        navEditor: 'ایڈیٹر',
-        navCaptions: 'کیپشنز',
-        navReframe: 'ری فریم',
-        navAutopilot: 'آٹو پائلٹ',
-        navExport: 'ایکسپورٹ',
-        toggleTheme: 'تھیم',
-        importVideo: 'ویڈیو درآمد کریں',
-        projectStorage: 'پروجیکٹ اور اسٹوریج',
-        projectTitle: 'پروجیکٹ کا نام',
-        saveProject: 'پروجیکٹ محفوظ کریں',
-        newProject: 'نیا پروجیکٹ',
-        savedProjects: 'محفوظ شدہ پروجیکٹس',
-        phase1Adjustments: 'رنگ اور ٹائٹل',
-        brightness: 'چمک',
-        contrast: 'تضاد',
-        saturation: 'سچوریشن',
-        overlayText: 'اوورلے ٹائٹل',
-        previewStage: 'اسٹوڈیو پریویو',
-        play: 'چلائیں',
-        pause: 'روکیں',
-        setIn: 'شروع مقرر کریں',
-        setOut: 'اختتام مقرر کریں',
-        trimAndMerge: 'ٹرم، مرج اور آڈیو',
-        trimStart: 'ٹرم آغاز (سیکنڈ)',
-        trimEnd: 'ٹرم اختتام (سیکنڈ)',
-        initFFmpeg: 'ایف ایف ایم پیگ لوڈ کریں',
-        applyTrim: 'ویڈیو ٹرم کریں',
-        mergeSecondVideo: 'دوسری ویڈیو کلپ منتخب کریں',
-        mergeClips: 'دونوں کلپس مرج کریں',
-        audioTools: 'آڈیو نکالنا اور مکسنگ',
-        extractAudio: 'ایم پی تھری نکالیں',
-        cancelTask: 'منسوخ کریں',
-        backgroundAudio: 'بیک گراؤنڈ آڈیو ٹریک',
-        mixVolume: 'مکس والیوم',
-        mixAudioBtn: 'آڈیو مکس کریں',
-        whisperCaptions: 'وسپر اے آئی کیپشنز',
-        captionLanguage: 'زبان',
-        transcribeBtn: 'ٹرانسکرائب کریں',
-        exportSrt: 'ایس آر ٹی برآمد کریں',
-        captionStyle: 'اوورلے انداز',
-        smartReframe: 'اسمارٹ ری فریم (بلیز فیس)',
-        aspectRatio: 'پہلو کا تناسب',
-        trackingSmoothing: 'ہمواری',
-        detectFaces: 'چہرے ٹریک کریں',
-        centerFallback: 'سینٹر کراپ',
-        autopilotTitle: 'آٹو پائلٹ ہائی لائٹس',
-        maxClips: 'کلپس کی تعداد',
-        clipLength: 'کلپ کا دورانیہ (سیکنڈ)',
+        navEditor: 'ایڈیٹر', navCaptions: 'کیپشنز', navReframe: 'ری فریم',
+        navAutopilot: 'آٹو پائلٹ', navExport: 'ایکسپورٹ', toggleTheme: 'تھیم',
+        importVideo: 'ویڈیو درآمد کریں', projectStorage: 'پروجیکٹ اور اسٹوریج',
+        projectTitle: 'پروجیکٹ کا نام', saveProject: 'پروجیکٹ محفوظ کریں',
+        newProject: 'نیا پروجیکٹ', savedProjects: 'محفوظ شدہ پروجیکٹس',
+        phase1Adjustments: 'رنگ اور ٹائٹل', brightness: 'چمک',
+        contrast: 'تضاد', saturation: 'سچوریشن', overlayText: 'اوورلے ٹائٹل',
+        previewStage: 'اسٹوڈیو پریویو', play: 'چلائیں', pause: 'روکیں',
+        setIn: 'شروع مقرر کریں', setOut: 'اختتام مقرر کریں',
+        trimAndMerge: 'ٹرم، مرج اور آڈیو', trimStart: 'ٹرم آغاز (سیکنڈ)',
+        trimEnd: 'ٹرم اختتام (سیکنڈ)', initFFmpeg: 'ایف ایف ایم پیگ لوڈ کریں',
+        applyTrim: 'ویڈیو ٹرم کریں', mergeSecondVideo: 'دوسری ویڈیو کلپ منتخب کریں',
+        mergeClips: 'دونوں کلپس مرج کریں', audioTools: 'آڈیو نکالنا اور مکسنگ',
+        extractAudio: 'ایم پی تھری نکالیں', cancelTask: 'منسوخ کریں',
+        backgroundAudio: 'بیک گراؤنڈ آڈیو ٹریک', mixVolume: 'مکس والیوم',
+        mixAudioBtn: 'آڈیو مکس کریں', whisperCaptions: 'وسپر اے آئی کیپشنز',
+        captionLanguage: 'زبان', transcribeBtn: 'ٹرانسکرائب کریں',
+        exportSrt: 'ایس آر ٹی برآمد کریں', captionStyle: 'اوورلے انداز',
+        smartReframe: 'اسمارٹ ری فریم (بلیز فیس)', aspectRatio: 'پہلو کا تناسب',
+        trackingSmoothing: 'ہمواری', detectFaces: 'چہرے ٹریک کریں',
+        centerFallback: 'سینٹر کراپ', autopilotTitle: 'آٹو پائلٹ ہائی لائٹس',
+        maxClips: 'کلپس کی تعداد', clipLength: 'کلپ کا دورانیہ (سیکنڈ)',
         findHighlights: 'ہائی لائٹس تلاش کریں',
         renderSelected: 'منتخب ایم پی فور رینڈر کریں',
-        downloadZip: 'زپ ڈاؤن لوڈ کریں',
-        exportMp4: 'ایم پی فور ایکسپورٹ',
-        resolution: 'ریزولوشن',
-        exportMp4Btn: 'ایم پی فور ویڈیو برآمد کریں'
+        downloadZip: 'زپ ڈاؤن لوڈ کریں', exportMp4: 'ایم پی فور ایکسپورٹ',
+        resolution: 'ریزولوشن', exportMp4Btn: 'ایم پی فور ویڈیو برآمد کریں'
       }
     };
 
+    /* =====================================================================
+       WIRING
+       ===================================================================== */
     const logEl = document.getElementById('activityLog');
     const progressBar = document.getElementById('globalProgressBar');
 
     function logMessage(msg, type = 'info') {
       const ts = new Date().toLocaleTimeString();
       const prefix = type === 'error' ? '[ERROR]' : type === 'warn' ? '[WARN]' : '[INFO]';
-      logEl.textContent += `
-[${ts}] ${prefix} ${msg}`;
+      logEl.textContent += `\n[${ts}] ${prefix} ${msg}`;
       logEl.scrollTop = logEl.scrollHeight;
     }
-
     function setProgress(pct) {
       const clamped = Math.max(0, Math.min(100, Number(pct) || 0));
       progressBar.style.width = `${clamped}%`;
@@ -798,45 +1274,26 @@
 
     const storage = new StorageEngine({ onLog: logMessage });
     const canvas = document.getElementById('studioCanvas');
-    const videoEngine = new VideoEngine(canvas, {
-      onLog: logMessage,
-      onProgress: setProgress
-    });
-    const whisperEngine = new WhisperEngine({
-      videoEngine,
-      onLog: logMessage,
-      onProgress: setProgress
-    });
-    const reframeEngine = new ReframeEngine({
-      onLog: logMessage,
-      onProgress: setProgress
-    });
+    const videoEngine = new VideoEngine(canvas, { onLog: logMessage, onProgress: setProgress });
+    const whisperEngine = new WhisperEngine({ videoEngine, onLog: logMessage, onProgress: setProgress });
+    const reframeEngine = new ReframeEngine({ onLog: logMessage, onProgress: setProgress });
     const autopilotEngine = new AutopilotEngine({
-      videoEngine,
-      whisperEngine,
-      reframeEngine,
-      onLog: logMessage,
-      onProgress: setProgress
+      videoEngine, whisperEngine, reframeEngine, onLog: logMessage, onProgress: setProgress
     });
-
     videoEngine.attachPhase2Engines({ whisperEngine, reframeEngine });
 
-    // Theme & Language (English / Urdu)
+    // Language
     function applyLanguage(lang) {
       document.documentElement.lang = lang;
       document.documentElement.dir = lang === 'ur' ? 'rtl' : 'ltr';
       document.querySelectorAll('[data-i18n]').forEach((el) => {
         const key = el.getAttribute('data-i18n');
-        if (I18N[lang] && I18N[lang][key]) {
-          el.textContent = I18N[lang][key];
-        }
+        if (I18N[lang] && I18N[lang][key]) el.textContent = I18N[lang][key];
       });
     }
+    document.getElementById('langSelect').addEventListener('change', (e) => applyLanguage(e.target.value));
 
-    document.getElementById('langSelect').addEventListener('change', (e) => {
-      applyLanguage(e.target.value);
-    });
-
+    // Theme
     document.getElementById('btnThemeToggle').addEventListener('click', () => {
       const html = document.documentElement;
       const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -844,7 +1301,7 @@
       logMessage(`Theme switched to ${next}.`);
     });
 
-    // Navigation between existing pages
+    // Nav
     document.querySelectorAll('.nav-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.nav-btn').forEach((b) => b.classList.remove('active'));
@@ -855,7 +1312,6 @@
       });
     });
 
-    // Enable controls once video is loaded
     function enableVideoActions() {
       [
         'btnPlayToggle', 'btnPause', 'btnSetIn', 'btnSetOut',
@@ -872,17 +1328,16 @@
         `${videoEngine.video.videoWidth}x${videoEngine.video.videoHeight} | ${videoEngine.duration.toFixed(1)}s`;
     }
 
-    // Video import & playback
     document.getElementById('btnSelectVideo').addEventListener('click', () => {
       document.getElementById('mediaFileInput').click();
     });
-
     document.getElementById('mediaFileInput').addEventListener('change', async (e) => {
       const file = e.target.files?.[0];
       if (!file) return;
       try {
         await videoEngine.loadVideoFile(file);
         enableVideoActions();
+        logMessage(`Loaded "${file.name}".`);
       } catch (err) {
         logMessage(err.message, 'error');
       }
@@ -896,13 +1351,11 @@
       document.getElementById('trimStartInput').value = t;
       videoEngine.setTrimRange(t, parseFloat(document.getElementById('trimEndInput').value) || videoEngine.duration);
     });
-
     document.getElementById('btnSetOut').addEventListener('click', () => {
       const t = Number(videoEngine.currentTime.toFixed(1));
       document.getElementById('trimEndInput').value = t;
       videoEngine.setTrimRange(parseFloat(document.getElementById('trimStartInput').value) || 0, t);
     });
-
     document.getElementById('timelineScrubber').addEventListener('click', (e) => {
       if (!videoEngine.duration) return;
       const rect = e.currentTarget.getBoundingClientRect();
@@ -916,7 +1369,6 @@
       const rem = (sec % 60).toFixed(1).padStart(4, '0');
       return `${mins}:${rem}`;
     }
-
     videoEngine.onTimeTick = (curr, dur) => {
       const pct = dur > 0 ? (curr / dur) * 100 : 0;
       document.getElementById('timelineFill').style.width = `${pct}%`;
@@ -925,27 +1377,24 @@
       highlightCaptionAtTime(curr);
     };
 
-    // Phase 1 color & overlay controls
+    // Adjustments
     document.getElementById('brightnessInput').addEventListener('input', (e) => {
       document.getElementById('brightnessVal').textContent = `${e.target.value}%`;
       videoEngine.setAdjustments({ brightness: Number(e.target.value) });
     });
-
     document.getElementById('contrastInput').addEventListener('input', (e) => {
       document.getElementById('contrastVal').textContent = `${e.target.value}%`;
       videoEngine.setAdjustments({ contrast: Number(e.target.value) });
     });
-
     document.getElementById('saturationInput').addEventListener('input', (e) => {
       document.getElementById('saturationVal').textContent = `${e.target.value}%`;
       videoEngine.setAdjustments({ saturation: Number(e.target.value) });
     });
-
     document.getElementById('overlayTitleInput').addEventListener('input', (e) => {
       videoEngine.setAdjustments({ overlayText: e.target.value });
     });
 
-    // IndexedDB Project Save / Load / Delete
+    // Projects
     async function refreshProjectList() {
       const container = document.getElementById('savedProjectsContainer');
       container.innerHTML = '';
@@ -971,8 +1420,7 @@
                 <button type="button" data-open="${escapeHtml(p.id)}" style="padding:4px 8px;font-size:0.74rem;">Open</button>
                 <button type="button" class="btn-danger" data-delete="${escapeHtml(p.id)}" style="padding:4px 8px;font-size:0.74rem;">Delete</button>
               </div>
-            </div>
-          `;
+            </div>`;
           item.querySelector('[data-open]').addEventListener('click', () => openSavedProject(p.id));
           item.querySelector('[data-delete]').addEventListener('click', async () => {
             await storage.deleteProject(p.id);
@@ -1027,8 +1475,7 @@
         const title = document.getElementById('projectTitleInput').value.trim() || 'ClipZone Project';
         const id = `cz-${Date.now()}`;
         await storage.saveProject({
-          id,
-          title,
+          id, title,
           fileName: videoEngine.fileName || 'video.mp4',
           videoBlob: videoEngine.sourceBlob || null,
           updatedAt: Date.now(),
@@ -1054,20 +1501,19 @@
       logMessage('Started a fresh project state.');
     });
 
-    // FFmpeg.wasm Editor & Export actions
+    // FFmpeg
     document.getElementById('btnInitFFmpeg').addEventListener('click', async () => {
       const badge = document.getElementById('ffmpegStatusBadge');
       badge.textContent = 'Loading...';
       try {
         await videoEngine.initFFmpeg();
-        badge.textContent = videoEngine.singleThreadMode ? 'FFmpeg (ST)' : 'FFmpeg Ready';
+        badge.textContent = 'FFmpeg Ready';
         document.getElementById('btnCancelFFmpeg').disabled = false;
       } catch (err) {
         badge.textContent = 'FFmpeg Error';
         logMessage(err.message, 'error');
       }
     });
-
     document.getElementById('btnCancelFFmpeg').addEventListener('click', () => {
       videoEngine.cancelFFmpeg();
       document.getElementById('ffmpegStatusBadge').textContent = 'Cancelled';
@@ -1090,12 +1536,9 @@
     document.getElementById('mergeFileInput').addEventListener('change', (e) => {
       secondaryVideoFile = e.target.files?.[0] || null;
     });
-
     document.getElementById('btnMergeVideos').addEventListener('click', async () => {
       try {
-        if (!secondaryVideoFile) {
-          throw new Error('Select a second video clip first.');
-        }
+        if (!secondaryVideoFile) throw new Error('Select a second video clip first.');
         const mergedBlob = await videoEngine.mergeVideosWithFFmpeg(videoEngine.sourceBlob, secondaryVideoFile);
         triggerBlobDownload(mergedBlob, 'clipzone-merged.mp4');
         await videoEngine.loadVideoBlob(mergedBlob, 'clipzone-merged.mp4');
@@ -1118,16 +1561,12 @@
     document.getElementById('mixAudioInput').addEventListener('change', (e) => {
       backgroundAudioFile = e.target.files?.[0] || null;
     });
-
     document.getElementById('mixVolumeInput').addEventListener('input', (e) => {
       document.getElementById('mixVolumeVal').textContent = `${e.target.value}%`;
     });
-
     document.getElementById('btnMixAudio').addEventListener('click', async () => {
       try {
-        if (!backgroundAudioFile) {
-          throw new Error('Select a background audio file first.');
-        }
+        if (!backgroundAudioFile) throw new Error('Select a background audio file first.');
         const vol = Number(document.getElementById('mixVolumeInput').value) / 100;
         const mixedBlob = await videoEngine.mixAudioWithFFmpeg(videoEngine.sourceBlob, backgroundAudioFile, vol);
         triggerBlobDownload(mixedBlob, 'clipzone-mixed.mp4');
@@ -1142,19 +1581,14 @@
       try {
         const resolution = document.getElementById('exportResolutionSelect').value;
         const aspect = document.getElementById('exportAspectSelect').value;
-        const mp4Blob = await videoEngine.exportMp4WithFFmpeg({
-          resolution,
-          aspectRatio: aspect,
-          reframeEngine,
-          whisperEngine
-        });
+        const mp4Blob = await videoEngine.exportMp4WithFFmpeg({ resolution, aspectRatio: aspect, reframeEngine });
         triggerBlobDownload(mp4Blob, `clipzone-${resolution}-${aspect.replace(':', 'x')}.mp4`);
       } catch (err) {
         logMessage(err.message, 'error');
       }
     });
 
-    // Whisper AI Captions (English, Urdu, Auto Detect)
+    // Whisper
     document.getElementById('btnRunWhisper').addEventListener('click', async () => {
       const badge = document.getElementById('whisperStatusBadge');
       const langChoice = document.getElementById('whisperLangSelect').value;
@@ -1168,12 +1602,10 @@
         logMessage(err.message, 'error');
       }
     });
-
     document.getElementById('captionStyleSelect').addEventListener('change', (e) => {
       whisperEngine.setCaptionStyle(e.target.value);
       videoEngine.renderPreviewFrame();
     });
-
     document.getElementById('btnDownloadSrt').addEventListener('click', () => {
       const srtContent = whisperEngine.toSRT();
       const blob = new Blob([srtContent], { type: 'text/plain;charset=utf-8' });
@@ -1183,26 +1615,22 @@
     function renderCaptionsList() {
       const list = document.getElementById('captionsEditorList');
       list.innerHTML = '';
-      const captions = whisperEngine.getCaptions();
-      captions.forEach((cap, idx) => {
+      whisperEngine.getCaptions().forEach((cap, idx) => {
         const div = document.createElement('div');
         div.className = 'list-item';
         div.dataset.capIndex = idx;
-        const isUrdu = /[؀-ۿ]/.test(cap.text) || cap.language === 'urdu';
+        const isUrdu = /[\u0600-\u06FF]/.test(cap.text) || cap.language === 'urdu';
         div.innerHTML = `
           <div class="row-between" style="font-size:0.74rem;color:var(--text-secondary);">
             <span>${fmtTime(cap.start)} - ${fmtTime(cap.end)}</span>
             <button type="button" data-seek="${cap.start}" style="padding:2px 7px;font-size:0.72rem;">Jump</button>
           </div>
-          <textarea rows="2" class="${isUrdu ? 'urdu-caption-preview' : ''}">${escapeHtml(cap.text)}</textarea>
-        `;
+          <textarea rows="2" class="${isUrdu ? 'urdu-caption-preview' : ''}">${escapeHtml(cap.text)}</textarea>`;
         div.querySelector('textarea').addEventListener('input', (ev) => {
           whisperEngine.updateCaption(idx, ev.target.value);
           videoEngine.renderPreviewFrame();
         });
-        div.querySelector('[data-seek]').addEventListener('click', () => {
-          videoEngine.seek(cap.start);
-        });
+        div.querySelector('[data-seek]').addEventListener('click', () => videoEngine.seek(cap.start));
         list.appendChild(div);
       });
     }
@@ -1211,28 +1639,23 @@
       const captions = whisperEngine.getCaptions();
       document.querySelectorAll('#captionsEditorList .list-item').forEach((el, idx) => {
         const c = captions[idx];
-        if (c && t >= c.start && t <= c.end) {
-          el.classList.add('active-cap');
-        } else {
-          el.classList.remove('active-cap');
-        }
+        if (c && t >= c.start && t <= c.end) el.classList.add('active-cap');
+        else el.classList.remove('active-cap');
       });
     }
 
-    // MediaPipe BlazeFace Smart Reframe
+    // Reframe
     document.getElementById('reframeRatioSelect').addEventListener('change', (e) => {
       reframeEngine.setAspectRatio(e.target.value);
       document.getElementById('exportAspectSelect').value = e.target.value;
       videoEngine.resizeCanvasForAspect(e.target.value);
       videoEngine.renderPreviewFrame();
     });
-
     document.getElementById('reframeSmoothInput').addEventListener('input', (e) => {
       const val = parseFloat(e.target.value);
       document.getElementById('reframeSmoothVal').textContent = val.toFixed(2);
       reframeEngine.setSmoothing(val);
     });
-
     document.getElementById('btnDetectFaces').addEventListener('click', async () => {
       const badge = document.getElementById('reframeStatusBadge');
       badge.textContent = 'Tracking...';
@@ -1245,26 +1668,24 @@
         logMessage(err.message, 'warn');
       }
     });
-
     document.getElementById('btnResetReframe').addEventListener('click', () => {
       reframeEngine.useCenterFallback();
       document.getElementById('reframeStatusBadge').textContent = 'Center Crop';
       videoEngine.renderPreviewFrame();
     });
 
-    // AutoPilot Highlights & ZIP Export
+    // Autopilot
     document.getElementById('btnGenerateHighlights').addEventListener('click', async () => {
       try {
         const count = parseInt(document.getElementById('clipCountInput').value, 10) || 3;
         const lengthSec = parseFloat(document.getElementById('clipDurationInput').value) || 15;
         await autopilotEngine.findHighlights({
-          maxClips: count,
-          clipDuration: lengthSec,
-          captions: whisperEngine.getCaptions()
+          maxClips: count, clipDuration: lengthSec, captions: whisperEngine.getCaptions()
         });
         renderCandidatesList();
         document.getElementById('btnRenderSelectedClips').disabled = false;
-        document.getElementById('autopilotStatusBadge').textContent = `${autopilotEngine.getCandidates().length} Clips`;
+        document.getElementById('autopilotStatusBadge').textContent =
+          `${autopilotEngine.getCandidates().length} Clips`;
       } catch (err) {
         logMessage(err.message, 'error');
       }
@@ -1284,8 +1705,7 @@
             </span>
             <span class="pill">Score ${clip.score.toFixed(1)}</span>
           </label>
-          <div style="font-size:0.75rem;color:var(--text-secondary);">${escapeHtml(clip.reason)}</div>
-        `;
+          <div style="font-size:0.75rem;color:var(--text-secondary);">${escapeHtml(clip.reason)}</div>`;
         row.querySelector('input[type="checkbox"]').addEventListener('change', (ev) => {
           autopilotEngine.setCandidateSelected(i, ev.target.checked);
         });
@@ -1298,9 +1718,7 @@
         const resolution = document.getElementById('exportResolutionSelect').value;
         const aspect = document.getElementById('reframeRatioSelect').value;
         const rendered = await autopilotEngine.renderSelectedClips({ resolution, aspectRatio: aspect });
-        if (rendered.length > 0) {
-          document.getElementById('btnDownloadClipsZip').disabled = false;
-        }
+        if (rendered.length > 0) document.getElementById('btnDownloadClipsZip').disabled = false;
       } catch (err) {
         logMessage(err.message, 'error');
       }
@@ -1325,18 +1743,22 @@
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 3000);
     }
-
     function escapeHtml(str) {
       return String(str || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    await storage.init();
-    await refreshProjectList();
+    // ---------- INIT ----------
+    (async () => {
+      try {
+        await storage.init();
+        await refreshProjectList();
+        logMessage('CLIPZONE AI ready. Import a video to begin.');
+      } catch (err) {
+        logMessage(`Init error: ${err.message}`, 'error');
+      }
+    })();
   </script>
 </body>
 </html>
-
