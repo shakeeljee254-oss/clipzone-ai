@@ -77,37 +77,48 @@ export class VideoEngine {
     return this.loadVideoBlob(file, file.name);
   }
 
-  async loadVideoBlob(blob, fileName = 'video.mp4') {
-    if (!blob) throw new Error('No video Blob provided.');
-    this.sourceBlob = blob;
-    this.fileName = fileName;
+  
+async loadVideoBlob(blob, fileName = 'video.mp4') {
+  if (!blob) throw new Error('No video Blob provided.');
 
-    if (this.video.src && this.video.src.startsWith('blob:')) {
-      URL.revokeObjectURL(this.video.src);
-    }
-    this.video.src = URL.createObjectURL(blob);
+  this.pause();
 
-    await new Promise((resolve, reject) => {
-      const ok = () => {
-        cleanup();
-        resolve();
-      };
-      const fail = () => {
-        cleanup();
-        reject(new Error('Unable to load video stream in browser.'));
-      };
-      const cleanup = () => {
-        this.video.removeEventListener('loadeddata', ok);
-        this.video.removeEventListener('error', fail);
-      };
-      this.video.addEventListener('loadeddata', ok);
-      this.video.addEventListener('error', fail);
-    });
-
-    this.video.currentTime = 0;
-    this.renderPreviewFrame();
-    this.onLog(`Loaded video "${fileName}" (${this.duration.toFixed(1)}s).`);
+  if (this.video.src && this.video.src.startsWith('blob:')) {
+    URL.revokeObjectURL(this.video.src);
   }
+
+  this.sourceBlob = blob;
+  this.fileName = fileName;
+
+  await new Promise((resolve, reject) => {
+    const cleanup = () => {
+      this.video.removeEventListener('loadeddata', onLoaded);
+      this.video.removeEventListener('error', onError);
+    };
+
+    const onLoaded = () => {
+      cleanup();
+      resolve();
+    };
+
+    const onError = () => {
+      cleanup();
+      reject(new Error('Unable to load video. Please try another video format.'));
+    };
+
+    this.video.addEventListener('loadeddata', onLoaded);
+    this.video.addEventListener('error', onError);
+
+    this.video.src = URL.createObjectURL(blob);
+    this.video.load();
+  });
+
+  this.video.currentTime = 0;
+  this.renderPreviewFrame();
+
+  this.onLog(`Loaded video "${fileName}" (${this.duration.toFixed(1)}s).`);
+}
+
 
   get currentTime() {
     return this.video.currentTime || 0;
