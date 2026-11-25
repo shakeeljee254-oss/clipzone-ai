@@ -377,101 +377,409 @@ async loadVideoBlob(blob, fileName = 'video.mp4') {
   }
 
   async extractAudioWithFFmpeg(videoBlob) {
-    if (!videoBlob) throw new Error('No video loaded.');
+
+  async initFFmpeg() {
+    if (this.ffmpegLoaded && this.ffmpeg) return this.ffmpeg;
+
+    this.onProgress(5);
+    this.onLog('Initializing FFmpeg.wasm...');
+
+    const ffmpeg = new FFmpeg();
+
+    ffmpeg.on('log', ({ message }) => {
+      if (message) this.onLog(`ffmpeg: ${message}`);
+    });
+
+    ffmpeg.on('progress', ({ progress }) => {
+      this.onProgress(
+        Math.round(Math.max(0, Math.min(1, progress)) * 100)
+      );
+    });
+
+    const hasSharedArrayBuffer =
+      typeof crossOriginIsolated !== 'undefined' &&
+      crossOriginIsolated &&
+      typeof SharedArrayBuffer !== 'undefined';
+
+    try {
+      if (hasSharedArrayBuffer) {
+        this.singleThreadMode = false;
+
+        await ffmpeg.load({
+          coreURL: await toBlobURL(
+            `${FFMPEG_MT_BASE_URL}/ffmpeg-core.js`,
+            'text/javascript'
+          ),
+          wasmURL: await toBlobURL(
+            `${FFMPEG_MT_BASE_URL}/ffmpeg-core.wasm`,
+            'application/wasm'
+          ),
+          workerURL: await toBlobURL(
+            `${FFMPEG_MT_BASE_URL}/ffmpeg-core.worker.js`,
+            'text/javascript'
+          )
+        });
+
+        this.onLog('FFmpeg loaded in multi-threaded mode.');
+      } else {
+        this.singleThreadMode = true;
+
+        this.onLog('Loading single-thread FFmpeg compatibility mode.');
+
+        await ffmpeg.load({
+          coreURL: await toBlobURL(
+            `${FFMPEG_BASE_URL}/ffmpeg-core.js`,
+            'text/javascript'
+          ),
+          wasmURL: await toBlobURL(
+            `${FFMPEG_BASE_URL}/ffmpeg-core.wasm`,
+            'application/wasm'
+          )
+        });
+
+        this.onLog('FFmpeg loaded in single-thread mode.');
+      }
+    } catch (err) {
+      throw new Error(
+        `FFmpeg initialization failed: ${err.message}`
+      );
+    }
+
+    this.ffmpeg = ffmpeg;
+    this.ffmpegLoaded = true;
+
+    this.onProgress(100);
+
+    return this.ffmpeg;
+  }
+
+  _beginTask() {
+    this.abortController = new AbortController();
+    return this.abortController.signal;
+  }
+
+  cancelFFmpeg() {
+    if (this.abortController) {
+      this.abortController.abort();
+      this.abortController = null;
+    }
+
+    if (this.ffmpeg && typeof this.ffmpeg.terminate === 'function') {
+      this.ffmpeg.terminate();
+      this.ffmpeg = null;
+      this.ffmpegLoaded = false;
+
+      this.onLog(
+        'FFmpeg operation cancelled and worker terminated.',
+        'warn'
+      );
+    }
+
+    this.onProgress(0);
+  }
+
+  async trimVideoWithFFmpeg(startSec, endSec) {
+    if (!this.sourceBlob) {
+      throw new Error('Import a video first.');
+    }
+
+    if (endSec <= startSec || startSec < 0) {
+      throw new Error('Invalid trim time.');
+    }
+
     const signal = this._beginTask();
     const ff = await this.initFFmpeg();
 
-    await ff.writeFile('extract_in.mp4', await fetchFile(videoBlob));
-    if (signal.aborted) throw new Error('Task cancelled.');
+    const inName = 'trim_in.mp4';
+    const outName = 'trim_out.mp4';
 
-    await ff.exec(['-i', 'extract_in.mp4', '-vn', '-ac', '1', '-ar', '16000', '-c:a', 'pcm_s16le', '-f', 'wav', 'extracted.wav']);
-    const data = await ff.readFile('extracted.wav');
-    await this._safeDelete(ff, ['extract_in.mp4', 'extracted.wav']);
-    this.onProgress(100);
-    return new Blob([data.buffer], { type: 'audio/wav' });
+    try {
+      await ff.writeFile(inName, await fetchFile(this.sourceBlob));
+
+      if (signal.aborted) {
+        throw new Error('Task cancelled.');
+      }
+
+      await ff.exec([
+        '-ss', String(startSec),
+        '-i', inName,
+        '-t', String(endSec - startSec),
+        '-c:v', 'libx264',
+        '-preset', 'ultrafast',
+        '-crf', '24',
+        '-c:a', 'aac',
+        '-movflags', '+faststart',
+        outName
+      ]);
+
+      if (signal.aborted) {
+        throw new Error('Task cancelled.');
+      }
+
+      const data = await ff.readFile(outName);
+
+      return new Blob([data], { type: 'video/mp4' });
+    } finally {
+      await this._safeDelete(ff, [inName, outName]);
+      this.onProgress(100);
+    }
+  }
+
+  async mergeVideosWithFFmpeg(firstBlob, secondBlob) {
+    if (!firstBlob || !secondBlob) {
+      throw new Error('Both video clips are required.');
+    }
+
+    const signal = this._beginTask();
+    const ff = await this.initFFmpeg();
+
+    try {
+      await ff.writeFile('clip1.mp4', await fetchFile(firstBlob));
+      await ff.writeFile('clip2.mp4', await fetchFile(secondBlob));
+
+      if (signal.aborted) {
+        throw new Error('Task cancelled.');
+      }
+
+      await ff.exec([
+        '-i', 'clip1.mp4',
+        '-i', 'clip2.mp4',
+        '-filter_complex',
+        '[0:v]scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,setsar=1[v0];[1:v]scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,setsar=1[v1];[v0][0:a][v1][1:a]concat=n=2:v=1:a=1[outv][outa]',
+        '-map', '[outv]',
+        '-map', '[outa]',
+        '-c:v', 'libx264',
+        '-preset', 'ultrafast',
+        '-c:a', 'aac',
+        '-movflags', '+faststart',
+        'merged.mp4'
+      ]);
+
+      if (signal.aborted) {
+        throw new Error('Task cancelled.');
+      }
+
+      const data = await ff.readFile('merged.mp4');
+
+      return new Blob([data], { type: 'video/mp4' });
+    } finally {
+      await this._safeDelete(ff, [
+        'clip1.mp4',
+        'clip2.mp4',
+        'merged.mp4'
+      ]);
+
+      this.onProgress(100);
+    }
+  }
+
+  async extractAudioWithFFmpeg(videoBlob) {
+    if (!videoBlob) {
+      throw new Error('No video loaded.');
+    }
+
+    const signal = this._beginTask();
+    const ff = await this.initFFmpeg();
+
+    try {
+      await ff.writeFile(
+        'extract_in.mp4',
+        await fetchFile(videoBlob)
+      );
+
+      if (signal.aborted) {
+        throw new Error('Task cancelled.');
+      }
+
+      await ff.exec([
+        '-i', 'extract_in.mp4',
+        '-vn',
+        '-ac', '1',
+        '-ar', '16000',
+        '-c:a', 'pcm_s16le',
+        '-f', 'wav',
+        'extracted.wav'
+      ]);
+
+      if (signal.aborted) {
+        throw new Error('Task cancelled.');
+      }
+
+      const data = await ff.readFile('extracted.wav');
+
+      return new Blob([data], { type: 'audio/wav' });
+    } finally {
+      await this._safeDelete(ff, [
+        'extract_in.mp4',
+        'extracted.wav'
+      ]);
+
+      this.onProgress(100);
+    }
   }
 
   async mixAudioWithFFmpeg(videoBlob, audioBlob, mixVolume = 0.35) {
-    if (!videoBlob || !audioBlob) throw new Error('Video and background audio are both required.');
+    if (!videoBlob || !audioBlob) {
+      throw new Error('Video and background audio are required.');
+    }
+
     const signal = this._beginTask();
     const ff = await this.initFFmpeg();
 
-    await ff.writeFile('mix_vid.mp4', await fetchFile(videoBlob));
-    await ff.writeFile('mix_aud.mp3', await fetchFile(audioBlob));
-    if (signal.aborted) throw new Error('Task cancelled.');
+    try {
+      await ff.writeFile('mix_vid.mp4', await fetchFile(videoBlob));
+      await ff.writeFile('mix_aud.mp3', await fetchFile(audioBlob));
 
-    const bgVol = Math.max(0, Math.min(1, mixVolume)).toFixed(2);
-    await ff.exec([
-      '-i', 'mix_vid.mp4',
-      '-i', 'mix_aud.mp3',
-      '-filter_complex', `[1:a]volume=${bgVol}[bg];[0:a][bg]amix=inputs=2:duration=shortest[aout]`,
-      '-map', '0:v',
-      '-map', '[aout]',
-      '-c:v', 'copy',
-      '-c:a', 'aac',
-      '-movflags', '+faststart',
-      'mixed_out.mp4'
-    ]);
+      if (signal.aborted) {
+        throw new Error('Task cancelled.');
+      }
 
-    const data = await ff.readFile('mixed_out.mp4');
-    await this._safeDelete(ff, ['mix_vid.mp4', 'mix_aud.mp3', 'mixed_out.mp4']);
-    this.onProgress(100);
-    return new Blob([data.buffer], { type: 'video/mp4' });
+      const bgVol = Math.max(
+        0,
+        Math.min(1, mixVolume)
+      ).toFixed(2);
+
+      await ff.exec([
+        '-i', 'mix_vid.mp4',
+        '-i', 'mix_aud.mp3',
+        '-filter_complex',
+        `[1:a]volume=${bgVol}[bg];[0:a][bg]amix=inputs=2:duration=shortest[aout]`,
+        '-map', '0:v',
+        '-map', '[aout]',
+        '-c:v', 'copy',
+        '-c:a', 'aac',
+        '-movflags', '+faststart',
+        'mixed_out.mp4'
+      ]);
+
+      if (signal.aborted) {
+        throw new Error('Task cancelled.');
+      }
+
+      const data = await ff.readFile('mixed_out.mp4');
+
+      return new Blob([data], { type: 'video/mp4' });
+    } finally {
+      await this._safeDelete(ff, [
+        'mix_vid.mp4',
+        'mix_aud.mp3',
+        'mixed_out.mp4'
+      ]);
+
+      this.onProgress(100);
+    }
   }
 
-  async exportMp4WithFFmpeg({ resolution = '720p', aspectRatio = '16:9', reframeEngine = null, startSec = null, endSec = null } = {}) {
-    if (!this.sourceBlob) throw new Error('Import a video before exporting MP4.');
+  async exportMp4WithFFmpeg({
+    resolution = '720p',
+    aspectRatio = '16:9',
+    reframeEngine = null,
+    startSec = null,
+    endSec = null
+  } = {}) {
+    if (!this.sourceBlob) {
+      throw new Error('Import a video before exporting MP4.');
+    }
+
     const signal = this._beginTask();
     const ff = await this.initFFmpeg();
 
-    const dims = this._resolveDimensions(resolution, aspectRatio);
-    await ff.writeFile('export_in.mp4', await fetchFile(this.sourceBlob));
-    if (signal.aborted) throw new Error('Task cancelled.');
+    try {
+      const dims = this._resolveDimensions(
+        resolution,
+        aspectRatio
+      );
 
-    const cropFilter = reframeEngine
-      ? reframeEngine.buildFFmpegCropFilter(dims.width, dims.height)
-      : `scale=${dims.width}:${dims.height}:force_original_aspect_ratio=decrease,pad=${dims.width}:${dims.height}:(ow-iw)/2:(oh-ih)/2,setsar=1`;
+      await ff.writeFile(
+        'export_in.mp4',
+        await fetchFile(this.sourceBlob)
+      );
 
-    const args = [];
-    if (typeof startSec === 'number' && startSec > 0) {
-      args.push('-ss', String(startSec));
+      if (signal.aborted) {
+        throw new Error('Task cancelled.');
+      }
+
+      const cropFilter = reframeEngine
+        ? reframeEngine.buildFFmpegCropFilter(
+            dims.width,
+            dims.height
+          )
+        : `scale=${dims.width}:${dims.height}:force_original_aspect_ratio=decrease,pad=${dims.width}:${dims.height}:(ow-iw)/2:(oh-ih)/2,setsar=1`;
+
+      const args = [];
+
+      if (typeof startSec === 'number' && startSec > 0) {
+        args.push('-ss', String(startSec));
+      }
+
+      if (
+        typeof endSec === 'number' &&
+        endSec > (startSec || 0)
+      ) {
+        args.push(
+          '-t',
+          String(endSec - (startSec || 0))
+        );
+      }
+
+      args.push(
+        '-i', 'export_in.mp4',
+        '-vf', cropFilter,
+        '-c:v', 'libx264',
+        '-preset', 'ultrafast',
+        '-crf', '23',
+        '-c:a', 'aac',
+        '-b:a', '128k',
+        '-movflags', '+faststart',
+        'export_out.mp4'
+      );
+
+      await ff.exec(args);
+
+      if (signal.aborted) {
+        throw new Error('Task cancelled.');
+      }
+
+      const data = await ff.readFile('export_out.mp4');
+
+      return new Blob([data], { type: 'video/mp4' });
+    } finally {
+      await this._safeDelete(ff, [
+        'export_in.mp4',
+        'export_out.mp4'
+      ]);
+
+      this.onProgress(100);
     }
-    if (typeof endSec === 'number' && endSec > (startSec || 0)) {
-      args.push('-to', String(endSec));
-    }
-    args.push(
-      '-i', 'export_in.mp4',
-      '-vf', cropFilter,
-      '-c:v', 'libx264',
-      '-preset', 'ultrafast',
-      '-crf', '23',
-      '-c:a', 'aac',
-      '-b:a', '128k',
-      '-movflags', '+faststart',
-      'export_out.mp4'
-    );
-
-    await ff.exec(args);
-    const data = await ff.readFile('export_out.mp4');
-    await this._safeDelete(ff, ['export_in.mp4', 'export_out.mp4']);
-    this.onProgress(100);
-    return new Blob([data.buffer], { type: 'video/mp4' });
   }
 
   _resolveDimensions(resolution, aspectRatio) {
     const is1080 = resolution === '1080p';
+
     if (aspectRatio === '9:16') {
-      return is1080 ? { width: 1080, height: 1920 } : { width: 720, height: 1280 };
+      return is1080
+        ? { width: 1080, height: 1920 }
+        : { width: 720, height: 1280 };
     }
+
     if (aspectRatio === '1:1') {
-      return is1080 ? { width: 1080, height: 1080 } : { width: 720, height: 720 };
+      return is1080
+        ? { width: 1080, height: 1080 }
+        : { width: 720, height: 720 };
     }
-    return is1080 ? { width: 1920, height: 1080 } : { width: 1280, height: 720 };
+
+    return is1080
+      ? { width: 1920, height: 1080 }
+      : { width: 1280, height: 720 };
   }
 
   async _safeDelete(ff, names) {
-    for (const n of names) {
-      try { await ff.deleteFile(n); } catch (_) {}
+    for (const name of names) {
+      try {
+        await ff.deleteFile(name);
+      } catch (_) {
+        // Ignore missing temporary files.
+      }
     }
   }
 }
