@@ -376,7 +376,8 @@ export class VideoEngine {
 
     this.onProgress(0);
   }
-    async _safeDelete(...names) {
+  
+  async _safeDelete(...names) {
     const ff = this.ffmpeg;
     if (!ff) return;
 
