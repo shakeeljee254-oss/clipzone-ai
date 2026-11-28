@@ -377,7 +377,10 @@ export class VideoEngine {
     this.onProgress(0);
   }
 
-  async _safeDelete(ff, names) {
+    async _safeDelete(...names) {
+    const ff = this.ffmpeg;
+    if (!ff) return;
+
     for (const name of names) {
       try {
         await ff.deleteFile(name);
@@ -386,6 +389,7 @@ export class VideoEngine {
       }
     }
   }
+  
   async trimVideoWithFFmpeg(startSec, endSec) {
     if (!this.sourceBlob) throw new Error('Please load a video first.');
 
