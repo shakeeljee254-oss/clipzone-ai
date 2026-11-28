@@ -386,3 +386,243 @@ export class VideoEngine {
       }
     }
   }
+  async trimVideoWithFFmpeg(startSec, endSec) {
+    if (!this.sourceBlob) throw new Error('Please load a video first.');
+
+    const start = Number(startSec);
+    const end = Number(endSec);
+
+    if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || end <= start) {
+      throw new Error('Invalid trim range.');
+    }
+
+    const ff = await this.initFFmpeg();
+    const id = Date.now();
+    const input = `trim_input_${id}.mp4`;
+    const output = `trim_output_${id}.mp4`;
+
+    try {
+      await ff.writeFile(input, await fetchFile(this.sourceBlob));
+
+      await ff.exec([
+        '-ss', String(start),
+        '-i', input,
+        '-t', String(end - start),
+        '-map', '0:v:0',
+        '-map', '0:a?',
+        '-c:v', 'libx264',
+        '-preset', 'ultrafast',
+        '-crf', '23',
+        '-c:a', 'aac',
+        '-b:a', '128k',
+        '-movflags', '+faststart',
+        output
+      ]);
+
+      const data = await ff.readFile(output);
+      return new Blob([data], { type: 'video/mp4' });
+    } finally {
+      await this._safeDelete(input);
+      await this._safeDelete(output);
+    }
+  }
+
+  async mergeVideosWithFFmpeg(firstBlob, secondBlob) {
+    if (!firstBlob || !secondBlob) {
+      throw new Error('Please select two videos.');
+    }
+
+    const ff = await this.initFFmpeg();
+    const id = Date.now();
+    const first = `merge_first_${id}.mp4`;
+    const second = `merge_second_${id}.mp4`;
+    const list = `merge_list_${id}.txt`;
+    const output = `merged_${id}.mp4`;
+
+    try {
+      await ff.writeFile(first, await fetchFile(firstBlob));
+      await ff.writeFile(second, await fetchFile(secondBlob));
+
+      const listText = `file '${first}'\nfile '${second}'`;
+      await ff.writeFile(list, new TextEncoder().encode(listText));
+
+      await ff.exec([
+        '-f', 'concat',
+        '-safe', '0',
+        '-i', list,
+        '-c:v', 'libx264',
+        '-preset', 'ultrafast',
+        '-crf', '23',
+        '-pix_fmt', 'yuv420p',
+        '-an',
+        '-movflags', '+faststart',
+        output
+      ]);
+
+      const data = await ff.readFile(output);
+      return new Blob([data], { type: 'video/mp4' });
+    } finally {
+      await this._safeDelete(first);
+      await this._safeDelete(second);
+      await this._safeDelete(list);
+      await this._safeDelete(output);
+    }
+  }
+
+  async extractAudioWithFFmpeg(videoBlob) {
+    if (!videoBlob) throw new Error('Please select a video.');
+
+    const ff = await this.initFFmpeg();
+    const id = Date.now();
+    const input = `audio_input_${id}.mp4`;
+    const output = `extracted_audio_${id}.wav`;
+
+    try {
+      await ff.writeFile(input, await fetchFile(videoBlob));
+
+      await ff.exec([
+        '-i', input,
+        '-vn',
+        '-acodec', 'pcm_s16le',
+        '-ar', '44100',
+        '-ac', '2',
+        output
+      ]);
+
+      const data = await ff.readFile(output);
+      return new Blob([data], { type: 'audio/wav' });
+    } finally {
+      await this._safeDelete(input);
+      await this._safeDelete(output);
+    }
+  }
+
+  async mixAudioWithFFmpeg(videoBlob, audioBlob, mixVolume = 0.35) {
+    if (!videoBlob || !audioBlob) {
+      throw new Error('Please select both video and audio.');
+    }
+
+    const volume = Math.max(0, Math.min(1, Number(mixVolume) || 0));
+    const ff = await this.initFFmpeg();
+    const id = Date.now();
+    const video = `mix_video_${id}.mp4`;
+    const audio = `mix_audio_${id}.mp3`;
+    const output = `mixed_${id}.mp4`;
+
+    try {
+      await ff.writeFile(video, await fetchFile(videoBlob));
+      await ff.writeFile(audio, await fetchFile(audioBlob));
+
+      await ff.exec([
+        '-i', video,
+        '-i', audio,
+        '-map', '0:v:0',
+        '-map', '1:a:0',
+        '-c:v', 'copy',
+        '-af', `volume=${volume}`,
+        '-c:a', 'aac',
+        '-b:a', '192k',
+        '-shortest',
+        '-movflags', '+faststart',
+        output
+      ]);
+
+      const data = await ff.readFile(output);
+      return new Blob([data], { type: 'video/mp4' });
+    } finally {
+      await this._safeDelete(video);
+      await this._safeDelete(audio);
+      await this._safeDelete(output);
+    }
+  }
+
+  _resolveDimensions(resolution = '1080p', aspectRatio = '16:9') {
+    const height = String(resolution).includes('720') ? 720 : 1080;
+    const ratio = String(aspectRatio).toLowerCase();
+
+    if (ratio === '9:16' || ratio === 'portrait') {
+      return {
+        width: height === 720 ? 405 : 608,
+        height: height === 720 ? 720 : 1080
+      };
+    }
+
+    if (ratio === '1:1' || ratio === 'square') {
+      return {
+        width: height,
+        height
+      };
+    }
+
+    return {
+      width: height === 720 ? 1280 : 1920,
+      height
+    };
+  }
+
+  async exportMp4WithFFmpeg(options = {}) {
+    const videoBlob = options.videoBlob || this.sourceBlob;
+
+    if (!videoBlob) throw new Error('Please load a video first.');
+
+    const resolution = options.resolution || '1080p';
+    const aspectRatio = options.aspectRatio || '16:9';
+    const dimensions = this._resolveDimensions(resolution, aspectRatio);
+
+    const ff = await this.initFFmpeg();
+    const id = Date.now();
+    const input = `export_input_${id}.mp4`;
+    const output = `clipzone_export_${id}.mp4`;
+
+    try {
+      await ff.writeFile(input, await fetchFile(videoBlob));
+
+      const filters = [
+        `scale=${dimensions.width}:${dimensions.height}:force_original_aspect_ratio=decrease`,
+        `pad=${dimensions.width}:${dimensions.height}:(ow-iw)/2:(oh-ih)/2`,
+        'setsar=1',
+        'format=yuv420p'
+      ];
+
+      await ff.exec([
+        '-i', input,
+        '-vf', filters.join(','),
+        '-c:v', 'libx264',
+        '-preset', 'ultrafast',
+        '-crf', '23',
+        '-c:a', 'aac',
+        '-b:a', '128k',
+        '-movflags', '+faststart',
+        output
+      ]);
+
+      const data = await ff.readFile(output);
+      return new Blob([data], { type: 'video/mp4' });
+    } finally {
+      await this._safeDelete(input);
+      await this._safeDelete(output);
+    }
+  }
+
+  destroy() {
+    this.pause();
+
+    if (typeof this.cancelFFmpeg === 'function') {
+      this.cancelFFmpeg();
+    }
+
+    if (this.video && this.video.src) {
+      if (this.video.src.startsWith('blob:')) {
+        URL.revokeObjectURL(this.video.src);
+      }
+
+      this.video.removeAttribute('src');
+      this.video.load();
+    }
+
+    this.sourceBlob = null;
+    this.fileName = '';
+    this.ffmpeg = null;
+    this.ffmpegLoaded = false;
+  }
+}
