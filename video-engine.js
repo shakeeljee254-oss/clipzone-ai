@@ -168,3 +168,221 @@ export class VideoEngine {
     if (typeof saturation === 'number') this.saturation = saturation;
     if (typeof overlayText === 'string') this.overlayText = overlayText;
     this.renderPreviewFrame();
+  }
+
+  resizeCanvasForAspect(aspectRatio) {
+    const sizes = {
+      '16:9': { w: 960, h: 540 },
+      '9:16': { w: 360, h: 640 },
+      '1:1': { w: 540, h: 540 }
+    };
+
+    const chosen = sizes[aspectRatio] || sizes['16:9'];
+    this.canvas.width = chosen.w;
+    this.canvas.height = chosen.h;
+    this.renderPreviewFrame();
+  }
+
+  _loop() {
+    const tick = () => {
+      if (!this.isPlaying) return;
+
+      if (this.video.currentTime >= this.trimEnd) {
+        this.pause();
+        return;
+      }
+
+      this.renderPreviewFrame();
+      this.onTimeTick?.(this.video.currentTime, this.duration);
+      this.rafId = requestAnimationFrame(tick);
+    };
+
+    if (this.rafId !== null) cancelAnimationFrame(this.rafId);
+    this.rafId = requestAnimationFrame(tick);
+  }
+
+  renderPreviewFrame() {
+    if (!this.ctx || !this.canvas) return;
+
+    const ctx = this.ctx;
+    const cw = this.canvas.width;
+    const ch = this.canvas.height;
+
+    ctx.save();
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, cw, ch);
+
+    if (this.video.readyState >= 2 && this.video.videoWidth > 0) {
+      ctx.filter = `brightness(${this.brightness}%) contrast(${this.contrast}%) saturate(${this.saturation}%)`;
+
+      const vw = this.video.videoWidth || cw;
+      const vh = this.video.videoHeight || ch;
+
+      if (this.reframeEngine?.getCropForFrame) {
+        const crop = this.reframeEngine.getCropForFrame(
+          vw, vh, cw, ch, this.currentTime
+        );
+
+        if (crop) {
+          ctx.drawImage(
+            this.video,
+            crop.sx, crop.sy, crop.sw, crop.sh,
+            0, 0, cw, ch
+          );
+        } else {
+          ctx.drawImage(this.video, 0, 0, cw, ch);
+        }
+      } else {
+        ctx.drawImage(this.video, 0, 0, cw, ch);
+      }
+    }
+
+    ctx.filter = 'none';
+
+    if (this.overlayText?.trim()) {
+      const fontSize = Math.max(16, Math.round(ch * 0.04));
+      ctx.font = `700 ${fontSize}px Inter, sans-serif`;
+      ctx.textAlign = 'left';
+
+      const width = ctx.measureText(this.overlayText).width;
+      ctx.fillStyle = 'rgba(0,0,0,0.55)';
+      ctx.fillRect(14, 14, width + 20, fontSize + 12);
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText(this.overlayText, 24, 14 + fontSize * 0.82);
+    }
+
+    this.whisperEngine?.drawOverlay?.(ctx, cw, ch, this.currentTime);
+    ctx.restore();
+  }
+
+  getState() {
+    return {
+      trimStart: this.trimStart,
+      trimEnd: this.trimEnd,
+      brightness: this.brightness,
+      contrast: this.contrast,
+      saturation: this.saturation,
+      overlayText: this.overlayText
+    };
+  }
+
+  applyState(state) {
+    if (!state) return;
+
+    if (typeof state.trimStart === 'number') this.trimStart = state.trimStart;
+    if (typeof state.trimEnd === 'number') this.trimEnd = state.trimEnd;
+    if (typeof state.brightness === 'number') this.brightness = state.brightness;
+    if (typeof state.contrast === 'number') this.contrast = state.contrast;
+    if (typeof state.saturation === 'number') this.saturation = state.saturation;
+    if (typeof state.overlayText === 'string') this.overlayText = state.overlayText;
+
+    this.renderPreviewFrame();
+  }
+
+  async initFFmpeg() {
+    if (this.ffmpegLoaded && this.ffmpeg) return this.ffmpeg;
+    if (this.ffmpegLoading) return this.ffmpegLoading;
+
+    this.ffmpegLoading = (async () => {
+      this.onProgress(5);
+      this.onLog('Initializing FFmpeg.wasm...');
+
+      const ffmpeg = new FFmpeg();
+
+      ffmpeg.on('log', ({ message }) => {
+        if (message) this.onLog(`ffmpeg: ${message}`);
+      });
+
+      ffmpeg.on('progress', ({ progress }) => {
+        this.onProgress(
+          Math.round(Math.max(0, Math.min(1, progress || 0)) * 100)
+        );
+      });
+
+      const canUseThreads =
+        typeof crossOriginIsolated !== 'undefined' &&
+        crossOriginIsolated &&
+        typeof SharedArrayBuffer !== 'undefined';
+
+      try {
+        if (canUseThreads) {
+          this.singleThreadMode = false;
+
+          await ffmpeg.load({
+            coreURL: await toBlobURL(
+              `${FFMPEG_MT_BASE_URL}/ffmpeg-core.js`,
+              'text/javascript'
+            ),
+            wasmURL: await toBlobURL(
+              `${FFMPEG_MT_BASE_URL}/ffmpeg-core.wasm`,
+              'application/wasm'
+            ),
+            workerURL: await toBlobURL(
+              `${FFMPEG_MT_BASE_URL}/ffmpeg-core.worker.js`,
+              'text/javascript'
+            )
+          });
+        } else {
+          this.singleThreadMode = true;
+
+          await ffmpeg.load({
+            coreURL: await toBlobURL(
+              `${FFMPEG_BASE_URL}/ffmpeg-core.js`,
+              'text/javascript'
+            ),
+            wasmURL: await toBlobURL(
+              `${FFMPEG_BASE_URL}/ffmpeg-core.wasm`,
+              'application/wasm'
+            )
+          });
+        }
+      } catch (err) {
+        try { ffmpeg.terminate(); } catch (_) {}
+        throw new Error(`FFmpeg initialization failed: ${err.message}`);
+      }
+
+      this.ffmpeg = ffmpeg;
+      this.ffmpegLoaded = true;
+      this.onProgress(100);
+
+      return ffmpeg;
+    })();
+
+    try {
+      return await this.ffmpegLoading;
+    } finally {
+      this.ffmpegLoading = null;
+    }
+  }
+
+  _beginTask() {
+    if (this.abortController) this.abortController.abort();
+
+    this.abortController = new AbortController();
+    return this.abortController.signal;
+  }
+
+  cancelFFmpeg() {
+    this.abortController?.abort();
+    this.abortController = null;
+
+    if (this.ffmpeg?.terminate) {
+      this.ffmpeg.terminate();
+      this.ffmpeg = null;
+      this.ffmpegLoaded = false;
+      this.onLog('FFmpeg operation cancelled.', 'warn');
+    }
+
+    this.onProgress(0);
+  }
+
+  async _safeDelete(ff, names) {
+    for (const name of names) {
+      try {
+        await ff.deleteFile(name);
+      } catch (_) {
+        // Ignore missing temporary files.
+      }
+    }
+  }
